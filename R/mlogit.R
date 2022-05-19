@@ -1,5 +1,5 @@
-#'Add together two number
-#'
+#' @title Multistate Life Table Method
+#' @description  A Multistate Life Table Method Based on Bayesian Approach
 #' @param y Dummy variables for multistates
 #' @param X Covariates
 #' @param samp Sampling times

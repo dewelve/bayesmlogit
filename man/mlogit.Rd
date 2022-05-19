@@ -2,7 +2,7 @@
 % Please edit documentation in R/mlogit.R
 \name{mlogit}
 \alias{mlogit}
-\title{Add together two number}
+\title{Multistate Life Table Method}
 \usage{
 mlogit(
   y,
@@ -26,10 +26,10 @@ mlogit(
 \item{verbose}{progress report}
 }
 \value{
-A array for all parameter samples
+An array for all parameter samples
 }
 \description{
-Add together two number
+A Multistate Life Table Method Based on Bayesian Approach
 }
 \examples{
 mlogit(y, X, samp=3000, burn=0,verbose=10)
