@@ -19,6 +19,10 @@ mlogit(
 
 \item{X}{Covariates}
 
+\item{m.0}{1}
+
+\item{P.0}{1}
+
 \item{samp}{Sampling times}
 
 \item{burn}{'burn-in' times}

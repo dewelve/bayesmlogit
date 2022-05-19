@@ -5,6 +5,11 @@
 #' @param samp Sampling times
 #' @param burn 'burn-in' times
 #' @param verbose progress report
+#' @param m.0 1
+#' @param P.0 1
+#' @export
+#' @import stats
+#' @importFrom stats pnorm rexp rnorm runif
 #' @return  An array for all parameter samples
 #' @examples
 #' mlogit(y, X, samp=3000, burn=0,verbose=10)
