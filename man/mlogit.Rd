@@ -7,6 +7,7 @@
 mlogit(
   y,
   X,
+  file_path = NA,
   m.0 = array(0, dim = c(ncol(X), ncol(y))),
   P.0 = array(0, dim = c(ncol(X), ncol(X), ncol(y))),
   samp = 1000,
@@ -15,17 +16,19 @@ mlogit(
 )
 }
 \arguments{
-\item{y}{Dummy variables for multistates}
+\item{y}{A vector of state transitions}
 
 \item{X}{Covariates}
 
-\item{m.0}{1}
+\item{file_path}{The file path for outputs.}
 
-\item{P.0}{1}
+\item{m.0}{Initial matrix.}
+
+\item{P.0}{Initial matrix.}
 
 \item{samp}{Sampling times}
 
-\item{burn}{'burn-in' times}
+\item{burn}{'burn.5-in' times}
 
 \item{verbose}{progress report}
 }
@@ -36,5 +39,8 @@ An array for all parameter samples
 A Multistate Life Table Method Based on Bayesian Approach
 }
 \examples{
-mlogit(y, X, samp=3000, burn=0,verbose=10)
+data <- lifedata
+y <- data[,1]
+X <- data[,-1]
+out <- mlogit(y, X ,samp=10, burn=10,verbose=10)
 }

@@ -1,26 +1,51 @@
 #' @title Multistate Life Table Method
 #' @description  A Multistate Life Table Method Based on Bayesian Approach
-#' @param y Dummy variables for multistates
+#' @param y A vector of state transitions
 #' @param X Covariates
 #' @param samp Sampling times
-#' @param burn 'burn-in' times
+#' @param burn 'burn.5-in' times
 #' @param verbose progress report
-#' @param m.0 1
-#' @param P.0 1
+#' @param m.0 Initial matrix.
+#' @param P.0 Initial matrix.
+#' @param file_path The file path for outputs.
 #' @export
 #' @import stats
 #' @importFrom stats pnorm rexp rnorm runif
 #' @return  An array for all parameter samples
 #' @examples
-#' mlogit(y, X, samp=3000, burn=0,verbose=10)
+#' data <- lifedata
+#' y <- data[,1]
+#' X <- data[,-1]
+#' out <- mlogit(y, X ,samp=10, burn=10,verbose=10)
 
-mlogit <- function(y, X,
+
+
+mlogit <- function(y, X,file_path=NA,
                    m.0=array(0, dim=c(ncol(X), ncol(y))),
                    P.0=array(0, dim=c(ncol(X), ncol(X), ncol(y))),
                    samp=1000, burn=500, verbose=1000)
 
 {
+  ##Pre-process
+  samp.5 <- samp*5
+  burn.5 <- burn*5
+  verbose.5 <- verbose*5
 
+  y.1 <- sort(unique(y))
+  y <- match(y,y.1)
+  data_f <- as.data.frame(cbind(y,X))
+  names(data_f)[1] <- 'y'
+
+  data_f$y <- as.factor(data_f$y)
+
+  J.1 <- nlevels(data_f$y)
+
+  X <- model.matrix(y ~ ., data=data_f)
+
+  y.all <- model.matrix(~ y - 1, data=data_f)
+  y <- y.all[,-J.1]
+
+  ##Construct sub-functions
   TRUNC = 0.64
 
   mass.texpon <- function(Z)
@@ -149,7 +174,7 @@ mlogit <- function(y, X,
   J = ncol(y) + 1;
 
   out = list(
-    beta = array(0, dim=c(samp, P, J-1))
+    beta = array(0, dim=c(samp.5, P, J-1))
   )
 
   beta = matrix(0, P, J);
@@ -163,7 +188,7 @@ mlogit <- function(y, X,
   for (j in 1:(J-1)) b.0[,j] = P.0[,,j] %*% m.0[,j];
 
   ## A = rowSums( exp(X %*% beta[,-1]) );
-  for (i in 1:(samp+burn)) {
+  for (i in 1:(samp.5+burn.5)) {
     for (j in 1:(J-1)) {
 
       ## For now recompute at each iteration.  Try taking out later.
@@ -191,11 +216,20 @@ mlogit <- function(y, X,
       ## A += exp(X %*% beta[,j]) - exp(X %*% beta[,(j+1) %% (J-1)])
 
       ## Store
-      if (i > burn) {
-        out$beta[i-burn,,j] = beta[,j];
+      if (i > burn.5) {
+        out$beta[i-burn.5,,j] = beta[,j];
       }
     }
-    if (i %% verbose == 0) cat("Finished", i, "\n");
+    if (i %% verbose.5 == 0) cat("Finished", i/5, "\n");
+  }
+
+  ##Process the result
+  dim(out$beta) <- c(samp.5,P*(J-1))
+  out <- as.matrix(out$beta)
+  indx <- seq(5, samp.5, 5)
+  out <- out[indx, ]
+  if(!is.na(file_path)){
+    utils::write.table(out, file=paste(file_path,"/result.txt",sep=''), row.names=FALSE, col.names=FALSE)
   }
 
   return(out)
