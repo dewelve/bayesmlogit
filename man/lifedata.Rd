@@ -3,7 +3,7 @@
 \docType{data}
 \name{lifedata}
 \alias{lifedata}
-\title{Data of nominal brown shrimp prices by size}
+\title{Data for generating life tables.}
 \format{
 A data frame with 1662 rows and 13 variables:
 \describe{
@@ -24,6 +24,6 @@ A data frame with 1662 rows and 13 variables:
 lifedata
 }
 \description{
-Shrimp are classified by size, 0-15 shrimp per pound, 15-20 shrimp per pound, etc. A smaller number per pound indicates larger shrimp. Nominal prices are total monthly value of brown shrimp andings within size class divided by total monthly landings within the size class.
+Data for generating life tables.
 }
 \keyword{datasets}

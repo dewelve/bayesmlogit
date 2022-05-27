@@ -3,7 +3,7 @@
 #' @param y A vector of state transitions
 #' @param X Covariates
 #' @param samp Sampling times
-#' @param burn 'burn.5-in' times
+#' @param burn 'burn-in' times
 #' @param verbose progress report
 #' @param m.0 Initial matrix.
 #' @param P.0 Initial matrix.

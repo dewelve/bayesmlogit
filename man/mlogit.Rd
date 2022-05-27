@@ -28,7 +28,7 @@ mlogit(
 
 \item{samp}{Sampling times}
 
-\item{burn}{'burn.5-in' times}
+\item{burn}{'burn-in' times}
 
 \item{verbose}{progress report}
 }
