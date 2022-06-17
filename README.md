@@ -20,7 +20,7 @@ The Bayesian approach offers some key advantages over other approaches. First, p
 
 #### Preprocess
 
-Before using the data, we need first construct the appropriate data set. The data set should include a vector for transition status and the covariates for generating the transition matrix. A transition status vector is a vector that includes the serial number of each transition. We have provided an example in the package, users can use `?lifedata` in R to see the details. 
+Before using the data, we need first construct the appropriate data set. The data set should include a vector for transition status and the covariates for generating the transition matrix. A transition status vector is a vector that includes the serial number of each transition. We have provided an example in the package, users can use `?lifedata` in R to find more details. 
 
 #### Generate Transition Matrix
 
