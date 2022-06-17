@@ -35,7 +35,7 @@ mlifeTable(
 
 \item{groupby}{The covariates used for making subgroups.}
 
-\item{vars}{The covariates considered in subgroup analysis.}
+\item{vars}{The covariates considered in subgroup analysis. For covariates that are not specified in \code{vars}, we will consider them have the same effect in each subgroup.}
 
 \item{status}{The status our simulated people are in. Default is 0, which means we will consider the general population.}
 
