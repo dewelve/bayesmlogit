@@ -214,8 +214,12 @@ mlogit.default <- function(y, X,file_path=NA,
       eta.j = X %*% beta[,j] - c.j;
 
       ## omega.j
-      for (q in 1:N)
+      for (q in 1:N){
+        #print(eta.j[q])
         w[q,j] = rpg.devroye.1(eta.j[q])$x;
+      }
+        
+        
 
       ## beta.j
       PL.j = t(X) %*% (X * w[,j]);

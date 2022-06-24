@@ -11,7 +11,7 @@ mlifeTable(
   states,
   file_path,
   groupby = NA,
-  vars = colnames(X),
+  vars = NA,
   status = 0,
   startages = 50,
   endages = 110,
@@ -35,7 +35,7 @@ mlifeTable(
 
 \item{groupby}{The covariates used for making subgroups.}
 
-\item{vars}{The covariates considered in subgroup analysis. For covariates that are not specified in \code{vars}, we will consider them have the same effect in each subgroup.}
+\item{vars}{The covariates considered in subgroup analysis. For covariates that are not specified in \code{vars}, we will consider them have the same effect in each subgroup. Please make sure you have specified a variable otherwise the life tables would be the same.}
 
 \item{status}{The status our simulated people are in. Default is 0, which means we will consider the general population.}
 
@@ -73,7 +73,7 @@ X <- data[,-1]
 # this is a long running example
 out <- mlogit(y, X ,samp=5000, burn=500,verbose=10)
 
-trans <- out
+trans <- out$outwstepwidth
 mlifeTable(y,X,trans =trans,
            groupby = c("male","norcg"),
            vars = "immigrant",

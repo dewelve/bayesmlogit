@@ -6,7 +6,7 @@
 #' @param states The total number of states in our data.
 #' @param file_path The file path for outputs.
 #' @param groupby The covariates used for making subgroups.
-#' @param vars The covariates considered in subgroup analysis. For covariates that are not specified in \code{vars}, we will consider them have the same effect in each subgroup.
+#' @param vars The covariates considered in subgroup analysis. For covariates that are not specified in \code{vars}, we will consider them have the same effect in each subgroup. Please make sure you have specified a variable otherwise the life tables would be the same.
 #' @param status The status our simulated people are in. Default is 0, which means we will consider the general population.
 #' @param startages start age of our life table. Default is 50.
 #' @param endages end age of our life table. Default is 110.
@@ -32,7 +32,7 @@
 #' # this is a long running example
 #' out <- mlogit(y, X ,samp=5000, burn=500,verbose=10)
 #'
-#' trans <- out
+#' trans <- out$outwstepwidth
 #' mlifeTable(y,X,trans =trans,
 #'            groupby = c("male","norcg"),
 #'            vars = "immigrant",
@@ -55,7 +55,7 @@
 mlifeTable <- function(y,X,trans,states,
                        file_path,
                        groupby=NA,
-                       vars = colnames(X),
+                       vars = NA,
                        status = 0,
                        startages=50,
                        endages=110,
@@ -124,7 +124,8 @@ mlifeTable <- function(y,X,trans,states,
     }
     
     #Check the existence of this subgroup
-    else if(!is.na(data.sub[[vars[1]]][t(index.matrix[index,vars.group])])){
+    else if(!is.na(data.sub[[vars[1]]][t(index.matrix[index,vars.group])]) |
+            !is.null(data.sub[[vars[1]]][t(index.matrix[index,vars.group])])){
       
       values <- NULL
       for(i in 1:length(cols)){
@@ -148,7 +149,6 @@ mlifeTable <- function(y,X,trans,states,
     
     #Construct life tables.
     for(reps in 1:nums){
-      
       b <- g[reps,]
       
       
@@ -173,12 +173,15 @@ mlifeTable <- function(y,X,trans,states,
         p=matrix(c(rep(0,states-1),1),states,states,byrow=T)
         
         pos=sort(unique(y))
+
         #populate transition matrix
-        count <- 0; m <- 1
+        count <- 0
+        m <- 1
         for(j in 1:(states-1)){
           for(k in 1:states){
             count=count+1
-            if(pos[m]==count){
+
+            if(pos[m]==count | m>length(pos)){
               p[j,k]=tp[m]
               m=m+1
             }

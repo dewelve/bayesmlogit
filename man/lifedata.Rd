@@ -31,7 +31,7 @@ Data extracted and processed from The Health and Retirement Study (HRS).
 Each subject has 9 status in the cohort: 1: health; 2: hearts & stroke; 3: cancer; 4: hearts and cancer; 5: diabetes; 6: hearts and diabetes;
 7: diabetes and cancer; 8: Hearts, cancer and diabetes; 9: death.
 
-Thus, our data will have 9*9-9= 72 kinds of transition status. To check the transition status for each subject, please use \code{lifedata[,1]}.
+Thus, our data will have \code{choose(9,2)*2 = 9\*9-9=72} kinds of transition status. To check the transition status for each subject, please use \code{lifedata[,1]}.
 
 To use this package on your data, please make sure your data have a transition status vector.
 }
