@@ -54,7 +54,10 @@ A Multistate Life Table Method Based on Bayesian Approach.
 data <- lifedata
 y <- data[,1]
 X <- data[,-1]
-# this is a long running example. To save time, you can run multiple samplers in parallel.
-out <- mlogit(y, X ,samp=5000, burn=500,verbose=10)
+
+# this is a long running example. 
+# To save time, you can run multiple samplers in parallel.
+# In practical application, please set burn around 500 to guarantee the convergence.
+out <- mlogit(y, X ,samp=250, burn=10,verbose=10)
 }
 }

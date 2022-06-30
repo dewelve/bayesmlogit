@@ -58,7 +58,7 @@ If TRUE, this function will create a new directory \code{mplotResults} under giv
 Life tables for each subgroup.
 }
 \description{
-A Multistate Life Table Method Based on Bayesian Approach. This function will return life tables for each subgroup. The values in the table represent the expectancy years for a subject to reach corresponding status. Note that the last column of each life table always indicates the expectancy years to death for each subject, while the order of other status in our life tables is determined by the order of status you specified when generating the transition status vector at the preprocessing step, which should be defined by yourself.
+A Multistate Life Table Method Based on Bayesian Approach. This function will return life tables for each subgroup. The values in the table represent the expectancy years for a subject to reach corresponding status. Note that the last column of each life table always indicates the expectancy years to death for each subject, while the order of other status in our life tables is determined by the order of status you specified when generating the transition status vector at the preprocessing step, which should be defined by yourself. Note that when your data have many states but the sample size is small, there could be singularity problems when generating the life tables.
 }
 \examples{
 \dontrun{
@@ -70,15 +70,19 @@ A Multistate Life Table Method Based on Bayesian Approach. This function will re
 data <- lifedata
 y <- data[,1]
 X <- data[,-1]
-# this is a long running example
-out <- mlogit(y, X ,samp=5000, burn=500,verbose=10)
+
+# this is a long running example.
+# To save time, you can run multiple samplers in parallel. 
+# In practical application, please set burn around 500 to guarantee the convergence.
+
+out <- mlogit(y, X ,samp=250, burn=10,verbose=10)
 
 trans <- out$outwstepwidth
 mlifeTable(y,X,trans =trans,
            groupby = c("male","norcg"),
            vars = "immigrant",
            states=9,
-           nums = 5,
+           nums = 50,
            file_path=".")
 
 #To name each status, try the status.names parameter.
@@ -86,7 +90,7 @@ mlifeTable(y,X,trans =trans,
            groupby = c("male","norcg"),
            vars = "immigrant",
            states=9,
-           nums = 5,
+           nums = 50,
            file_path=".",
            status.names= c("health","hearts & stroke","cancer",
                            "hearts & cancer", "diabetes", "hearts & diabetes",
