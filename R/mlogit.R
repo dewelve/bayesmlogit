@@ -3,7 +3,7 @@
 #' @param y A vector of state transitions. For more details, please use \code{?lifedata}.
 #' @param X Covariates matrix. Note that \code{X} must include age as a covariate.
 #' @param samp Sampling times. We suggest a \code{samp} \eqn{\ge} 5000. To save time, we suggest you running multiple samplers in parallel.
-#' @param burn 'burn-in' times. To guarantee the convergence of our samples, we suggest a \code{burn} \eqn{\ge} 500.
+#' @param burn 'burn-in' times. To guarantee the convergence of our samples, we suggest a \code{burn} \eqn{\ge} 500. 
 #' @param verbose progress report. Default is 10, which means this function will report the current progress after every 10 samples.
 #' @param m.0 Initial matrix for MCMC methods.
 #' @param P.0 Initial matrix for MCMC methods.
@@ -24,8 +24,8 @@
 #' data <- lifedata
 #' y <- data[,1]
 #' X <- data[,-1]
-#' # this is a long running example. To save time, you can run multiple samplers in parallel.
-#' out <- mlogit(y, X ,samp=5000, burn=500,verbose=10)
+#' # this is a long running example. To save time, you can run multiple samplers in parallel.In practical application, please set burn around 500 to guarantee the convergence.
+#' out <- mlogit(y, X ,samp=250, burn=10,verbose=10)
 #' }
 
 mlogit <- function(y, X,
@@ -239,7 +239,7 @@ mlogit.default <- function(y, X,file_path=NA,
         out$beta[i-burn,,j] = beta[,j];
       }
     }
-    if (i %% verbose == 0) cat("Finished", i, "\n");
+    if (i %% verbose == 0) cat("Finished", i,"/",burn+samp, "\n");
   }
 
   ##Process the result
