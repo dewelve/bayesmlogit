@@ -31,7 +31,6 @@
 #' X <- data[,-1]
 #' 
 #' # this is a long running example.
-#' # To save time, you can run multiple samplers in parallel. 
 #' # In practical application, please set burn around 500 to guarantee the convergence.
 #' 
 #' out <- mlogit(y, X ,samp=250, burn=10,verbose=10)
@@ -44,7 +43,13 @@
 #'            nums = 50,
 #'            file_path=".")
 #'
-#' #To name each status, try the status.names parameter.
+#' # To save time, you can run multiple samplers in parallel. 
+#' out1 <- mlogit(y, X ,samp=150, burn=10,verbose=10)
+#' out2 <- mlogit(y, X ,samp=100, burn=10,verbose=10)
+#' 
+#' trans <- rbind(out1$outwstepwidth, out2$outwstepwidth)
+#' 
+#' # To name each status, try the status.names option.
 #' mlifeTable(y,X,trans =trans,
 #'            groupby = c("male","norcg"),
 #'            vars = "immigrant",
@@ -54,6 +59,7 @@
 #'            status.names= c("health","hearts & stroke","cancer",
 #'                            "hearts & cancer", "diabetes", "hearts & diabetes",
 #'                            "diabetes & cancer", "Hearts, cancer & diabetes"))
+#'                            
 #' }
 
 mlifeTable <- function(y,X,trans,states,

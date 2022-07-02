@@ -26,16 +26,18 @@
 #' X <- data[,-1]
 #' 
 #' # this is a long running example. 
-#' # To save time, you can run multiple samplers in parallel.
-#' # In practical application, please set burn around 500 to guarantee the convergence.
+#' # To save time, you can run multiple samplers in parallel and combine the results.
+#' # In practical application, please set burn at least 500 to guarantee the convergence.
 #' out <- mlogit(y, X ,samp=250, burn=10,verbose=10)
+#' 
+#' 
 #' }
 
 mlogit <- function(y, X,
                    file_path=NA,
                    m.0=array(0, dim=c(ncol(X), ncol(y))),
                    P.0=array(0, dim=c(ncol(X), ncol(X), ncol(y))),
-                   samp=1000, burn=500, verbose=1000,
+                   samp=1000, burn=500, verbose=100,
                    step.width = 5,
                    trace.plot=FALSE){
   UseMethod("mlogit")
