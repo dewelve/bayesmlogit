@@ -51,7 +51,7 @@ mlogit.default <- function(y, X,file_path=NA,
                    trace.plot=FALSE)
 
 {
-  time1 <- Sys.time()
+  #time1 <- Sys.time()
   ##Pre-process
   y.1 <- sort(unique(y))
   y <- match(y,y.1)
@@ -246,10 +246,10 @@ mlogit.default <- function(y, X,file_path=NA,
       }
     }
     if (i %% verbose == 0) {
-      time2 <- Sys.time()
-      time <- time2 - time1
-      time1 <- Sys.time()
-      cat("Finished", i,"/",burn+samp, "\t",time,"\n")
+      #time2 <- Sys.time()
+      #time <- time2 - time1
+      #time1 <- Sys.time()
+      cat("Finished", i,"/",burn+samp,"\n")
       
     }
   }

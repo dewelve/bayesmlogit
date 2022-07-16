@@ -15,6 +15,7 @@ mlifeTable_plot(
   subgroup.names = NULL,
   status.names = NA,
   compare = FALSE,
+  midpoint.type = "mean",
   ...
 )
 }
@@ -38,6 +39,8 @@ mlifeTable_plot(
 \item{status.names}{A vector used to specify names of each status except death.}
 
 \item{compare}{An indicator for generating comparsion results. If TRUE, this function will quote \code{life_compare()} and generate a table with all comparsion results based on the reference variables and reference levels you defined.}
+
+\item{midpoint.type}{The indicator for credible interval plots. Can be either "mean" or "median". Default is "mean", which means the plots will use mean values as the middle point.}
 
 \item{...}{Extra parameters for \code{life_compare()}. For details, please use \code{?life_compare()}.}
 }
