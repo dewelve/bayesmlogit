@@ -1,4 +1,4 @@
-Package: mlogit
+Package: bayesmlogit
 Type: Package
 Title: A Multistate life table (MSLT) methodology based on Bayesian approach
 Version: 0.1.0
@@ -14,8 +14,6 @@ Authors@R:
 Maintainer: Xuezhixing Zhang <xuezhixing.zhang@yale.edu>
 Description: Create life tables with Bayesian approach, which can be very useful for modelling a complex health process when considering multiple predisposing factors and multiple coexisting health conditions.
 License: GPL (>= 3)
-URL: https://r-spatial.github.io/
-BugReports: https://github.com/r-spatial/sf/issues/
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.0
