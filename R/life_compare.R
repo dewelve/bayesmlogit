@@ -9,7 +9,7 @@
 #' @param index.matrix A matrix that generated in \code{mlifeTable_plot()}. You don't need to specify it when using \code{mlifeTable_plot()}.
 #' @param status.names A vector used to specify names of each status except death. 
 #' @param prop The indicator for proportion plots and tables. If TRUE, this function will output life expectancy proportion plots and tables in addition to orginal life expectancy plots. Default is TRUE. 
-#' @param criteria The criteria for comparison, which can be either ">" or "<". Default is ">".
+#' @param criterion The criterion for comparison, which can be either ">" or "<". Default is ">".
 #' @import utils
 #' @export
 #' @return A \code{.csv} file.
@@ -32,7 +32,7 @@ life_compare <- function(file_path,file,
                          status.include = 0 , states,
                          ref.var, ref.level, index.matrix,
                          prop = TRUE,
-                         criteria = ">",
+                         criterion = ">",
                          status.names = NA){
   UseMethod("life_compare")
 }
@@ -43,10 +43,10 @@ life_compare <- function(file_path,file,
                          status.include = 0 , states,
                          ref.var, ref.level, index.matrix,
                          prop = TRUE,
-                         criteria = ">",
+                         criterion = ">",
                          status.names = NA){
   #Initialize
-  cri <- criteria
+  cri <- criterion
   other.var <- colnames(index.matrix)[which(!(colnames(index.matrix) %in% ref.var))]
   if(length(other.var) == 0){Index.other <- matrix("",nrow=1, ncol=1)}
   else{Index.other <- unique(as.matrix(index.matrix[,other.var]))}
@@ -127,7 +127,7 @@ life_compare <- function(file_path,file,
                                                                         status.include , states,
                                                                         index.ref,
                                                                         index.com,
-                                                                        criteria = cri,
+                                                                        criterion = cri,
                                                                         prop = prop)
         col.names[j+dim(Index)[1]*(index.other.num-1)] <- paste("group",index.com,sep = '')
       }
@@ -146,7 +146,7 @@ life_compare <- function(file_path,file,
 life_compare_one <- function(file_path,file,
                              status.include , states,
                              index.ref,index.com,
-                             criteria = ">",prop){
+                             criterion = ">",prop){
   
   value <- NULL
   
@@ -171,13 +171,13 @@ life_compare_one <- function(file_path,file,
     
     #Find Proportion of expectancy years
     for(i in 1:(states)){
-      if(criteria == ">"){
+      if(criterion == ">"){
         if(i == 1){value[i] <- mean(as.vector(ttle.ref)>as.vector(ttle.com))}
         else{
           value[i] <- mean(as.vector(data.ref[,i-1])>as.vector(data.com[,i-1]))
         }
       }
-      else if(criteria == "<"){
+      else if(criterion == "<"){
         if(i == 1){value[i] <- mean(as.vector(ttle.ref)<as.vector(ttle.com))}
         else{
           value[i] <- mean(as.vector(data.ref[,i-1])<as.vector(data.com[,i-1]))
@@ -188,10 +188,10 @@ life_compare_one <- function(file_path,file,
     #Find Proportion of expectancy years proportions
     if(prop == TRUE){
       for(i in 1:(states-1)){
-        if(criteria == ">"){
+        if(criterion == ">"){
           value[states + i] <- mean(as.vector(data.ref[,i]/ttle.ref)>as.vector(data.com[,i]/ttle.com))
         }
-        else if(criteria == "<"){
+        else if(criterion == "<"){
           value[states + i] <- mean(as.vector(data.ref[,i]/ttle.ref)<as.vector(data.com[,i]/ttle.com))
         }
       }
@@ -199,8 +199,8 @@ life_compare_one <- function(file_path,file,
   }
   else{
     for(i in 1:length(status.include )){
-      if(criteria == ">"){value[i] <- mean(as.vector(data.ref[,status.include [i]])>as.vector(data.com[,status.include [i]]))}
-      else if(criteria == "<"){value[i] <- mean(as.vector(data.ref[,status.include [i]])<as.vector(data.com[,status.include[i]]))}
+      if(criterion == ">"){value[i] <- mean(as.vector(data.ref[,status.include [i]])>as.vector(data.com[,status.include [i]]))}
+      else if(criterion == "<"){value[i] <- mean(as.vector(data.ref[,status.include [i]])<as.vector(data.com[,status.include[i]]))}
     }
   }
 

@@ -13,7 +13,7 @@ life_compare(
   ref.level,
   index.matrix,
   prop = TRUE,
-  criteria = ">",
+  criterion = ">",
   status.names = NA
 )
 }
@@ -34,7 +34,7 @@ life_compare(
 
 \item{prop}{The indicator for proportion plots and tables. If TRUE, this function will output life expectancy proportion plots and tables in addition to orginal life expectancy plots. Default is TRUE.}
 
-\item{criteria}{The criteria for comparison, which can be either ">" or "<". Default is ">".}
+\item{criterion}{The criterion for comparison, which can be either ">" or "<". Default is ">".}
 
 \item{status.names}{A vector used to specify names of each status except death.}
 }
