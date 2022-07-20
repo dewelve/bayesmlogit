@@ -6,7 +6,7 @@
 #' @param states The total number of states in our data.
 #' @param file_path The file path for outputs.
 #' @param groupby The covariates used for making subgroups.
-#' @param vars The covariates considered in subgroup analysis. For covariates that are not specified in \code{vars}, we will consider them have the same effect in each subgroup. Please make sure you have specified a variable otherwise the life tables would be the same.
+#' @param vars The covariates considered in subgroup analysis. For covariates that are not specified in \code{vars}, we will consider them have the same effect in each subgroup. Please make sure you have specified at least one variable otherwise the life tables would be the same.
 #' @param status The status our simulated people are in. Default is 0, which means we will consider the general population.
 #' @param startages start age of our life table. Default is 50.
 #' @param endages end age of our life table. Default is 110.

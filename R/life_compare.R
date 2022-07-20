@@ -46,6 +46,7 @@ life_compare <- function(file_path,file,
                          criteria = ">",
                          status.names = NA){
   #Initialize
+  cri <- criteria
   other.var <- colnames(index.matrix)[which(!(colnames(index.matrix) %in% ref.var))]
   if(length(other.var) == 0){Index.other <- matrix("",nrow=1, ncol=1)}
   else{Index.other <- unique(as.matrix(index.matrix[,other.var]))}
@@ -126,7 +127,7 @@ life_compare <- function(file_path,file,
                                                                         status.include , states,
                                                                         index.ref,
                                                                         index.com,
-                                                                        criteria = criteria,
+                                                                        criteria = cri,
                                                                         prop = prop)
         col.names[j+dim(Index)[1]*(index.other.num-1)] <- paste("group",index.com,sep = '')
       }
