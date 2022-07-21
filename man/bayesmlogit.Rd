@@ -51,14 +51,14 @@ A Multistate Life Table Method Based on Bayesian Approach.
 }
 \examples{
 \dontrun{
-data <- lifedata
+data <- lifedata_simp
 y <- data[,1]
 X <- data[,-1]
 
 # this is a long running example. 
 # To save time, you can run multiple samplers in parallel and combine the results.
 # In practical application, please set burn at least 500 to guarantee the convergence.
-out <- bayesmlogit(y, X ,samp=250, burn=10,verbose=10)
+out <- bayesmlogit(y, X ,samp=1000, burn=20,verbose=10)
 
 
 }

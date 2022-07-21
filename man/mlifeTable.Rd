@@ -62,31 +62,29 @@ A Multistate Life Table Method Based on Bayesian Approach. This function will re
 }
 \examples{
 \dontrun{
-#The life tables generated in the example have 9 columns, which correspond to 9 status: 
-#1: health; 2: hearts & stroke; 3: cancer; 
-#4: hearts & cancer; 5: diabetes; 6: hearts & diabetes;
-#7: diabetes & cancer; 8: Hearts, cancer & diabetes; 9: death.
+#The life tables generated in the example have 3 columns, which correspond to 9 status: 
+#1: health; 2: unhealthiness; 3: death;
 
-data <- lifedata
+data <- lifedata_simp
 y <- data[,1]
 X <- data[,-1]
 
 # this is a long running example.
-# In practical application, please set burn around 500 to guarantee the convergence.
+# In practical application, please set burn no less than 500 to guarantee the convergence.
 
-out <- bayesmlogit(y, X ,samp=250, burn=10,verbose=10)
+out <- bayesmlogit(y, X ,samp=1000, burn=20,verbose=10)
 
 trans <- out$outwstepwidth
 mlifeTable(y,X,trans =trans,
            groupby = c("male","norcg"),
            vars = "immigrant",
-           states=9,
-           nums = 50,
+           states=3,
+           nums = 200,
            file_path=".")
 
 # To save time, you can run multiple samplers in parallel. 
-out1 <- bayesmlogit(y, X ,samp=150, burn=10,verbose=10)
-out2 <- bayesmlogit(y, X ,samp=100, burn=10,verbose=10)
+out1 <- bayesmlogit(y, X ,samp=1000, burn=20,verbose=10)
+out2 <- bayesmlogit(y, X ,samp=1500, burn=20,verbose=10)
 
 trans <- rbind(out1$outwstepwidth, out2$outwstepwidth)
 
@@ -94,8 +92,8 @@ trans <- rbind(out1$outwstepwidth, out2$outwstepwidth)
 mlifeTable(y,X,trans =trans,
            groupby = c("male","norcg"),
            vars = "immigrant",
-           states=9,
-           nums = 50,
+           states=3,
+           nums = 200,
            file_path=".",
            status.names= c("health","hearts & stroke","cancer",
                            "hearts & cancer", "diabetes", "hearts & diabetes",
