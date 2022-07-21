@@ -7,7 +7,7 @@
 \format{
 A data frame with 7321 rows and 13 variables:
 \describe{
-  \item{trans}{Transition status was recorded in the original data. In this data, we have 4 kinds of transtion transition in total.}
+  \item{trans}{Transition status was recorded in the original data. In this data, we have 4 kinds of transtions in total.}
   \item{age}{Age for each subject.}
   \item{male}{Sex for each subject. male=1, female=0}
   \item{black,other,hispanic}{Dummy variables for Race.}
