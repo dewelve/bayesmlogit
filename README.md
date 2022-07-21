@@ -32,9 +32,9 @@ We have provided a function `mlifeTable()` for users to generate life tables for
 
 
 
-## Common Errors
+## Common Errors 
 
-#### Singularity
+#### Singularity Issue
 
 When the sample size is small and the number of possible states is large, there would be singularity problems when generating life tables. To solve this problem, we suggest users choosing a larger sample or deleting those negligible states.  
 
