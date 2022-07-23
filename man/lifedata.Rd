@@ -10,7 +10,8 @@ A data frame with 7194 rows and 13 variables:
   \item{trans}{Transition status was recorded in the original data. In this data, we have 4 kinds of transtions in total.}
   \item{age}{Age for each subject.}
   \item{male}{Sex for each subject. male=1, female=0}
-  \item{black,other,hispanic}{Dummy variables for Race.}
+  \item{black,hispanic}{Dummy variables for Race.}
+  \item{other}{Indicator for non-white, non-black Race.}
   \item{mar}{Marital status.}
   \item{educc,educg}{Dummy variables for education level.}
   \item{cohort}{Cohort. Birth cohort, which is birth year minus 1900. }

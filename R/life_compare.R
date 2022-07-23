@@ -23,7 +23,7 @@
 #'       states = 3,
 #'       file_path = ".",
 #'       compare = TRUE,
-#'       ref.var = c("black","hispanic","other"),
+#'       ref.var = c("black","hispanic"),
 #'       ref.level = c(0,0,0))
 #' 
 #'}
