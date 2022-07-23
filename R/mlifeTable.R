@@ -8,51 +8,51 @@
 #' @param groupby The covariates used for making subgroups.
 #' @param vars The covariates considered in subgroup analysis. For covariates that are not specified in \code{vars}, we will consider them have the same effect in each subgroup. Please make sure you have specified at least one variable otherwise the life tables would be the same.
 #' @param status The status our simulated people are in. Default is 0, which means we will consider the general population.
-#' @param startages start age of our life table. Default is 50.
-#' @param endages end age of our life table. Default is 110.
+#' @param startages Start age of our life table. Default is 50.
+#' @param endages End age of our life table. Default is 110.
 #' @param age.gap The age gap when generating ages between each start age and end age. Default is 2.
-#' @param nums number of life tables generated for each subgroup. Default is 1000.
+#' @param nums Number of life tables generated for each subgroup. Default is 1000.
 #' @param mlifeTable_plot The indicator for generating tables and plots for posterior means and credible intervals. 
 #' If TRUE, this function will create a new directory \code{mplotResults} under given \code{file_path} and output corresponding plots for posterior means and credible intervals.
 #' @param status.names A vector used to specify names of each status except death. You can also specify them in the output files.
-#' @param ... Extra parameters for \code{mlifeTable_plot()}.For details, please use \code{?mlifeTable_plot()}
+#' @param ... Extra parameters for \code{mlifeTable_plot()}. For details, please use \code{?mlifeTable_plot()}
 #' @import utils
 #' @export
 #' @return Life tables for each subgroup.
 #' @examples
 #' \dontrun{
-#' #The life tables generated in the example have 3 columns, which correspond to 9 status: 
+#' #The life tables generated in the example have 3 columns, which correspond to 3 status: 
 #' #1: health; 2: unhealthiness; 3: death;
 #' 
-#' data <- lifedata_simp
+#' data <- lifedata
 #' y <- data[,1]
 #' X <- data[,-1]
 #' 
 #' # this is a long running example.
 #' # In practical application, please set burn no less than 500 to guarantee the convergence.
 #' 
-#' out <- bayesmlogit(y, X ,samp=1000, burn=20,verbose=10)
+#' out <- bayesmlogit(y, X ,samp=1000, burn=500,verbose=10)
 #'
 #' trans <- out$outwstepwidth
 #' mlifeTable(y,X,trans =trans,
-#'            groupby = c("male","norcg"),
-#'            vars = "immigrant",
+#'            groupby = c("male","black","hispanic","other"),
+#'            vars = "mar",
 #'            states=3,
 #'            nums = 200,
 #'            file_path=".")
 #'
 #' # To save time, you can run multiple samplers in parallel. 
-#' out1 <- bayesmlogit(y, X ,samp=1000, burn=20,verbose=10)
-#' out2 <- bayesmlogit(y, X ,samp=1500, burn=20,verbose=10)
+#' out1 <- bayesmlogit(y, X ,samp=1500, burn=500,verbose=10)
+#' out2 <- bayesmlogit(y, X ,samp=1500, burn=500,verbose=10)
 #' 
 #' trans <- rbind(out1$outwstepwidth, out2$outwstepwidth)
 #' 
 #' # To name each status, try the status.names option.
 #' mlifeTable(y,X,trans =trans,
-#'            groupby = c("male","norcg"),
-#'            vars = "immigrant",
+#'            groupby = c("male","black","hispanic","other"),
+#'            vars = "mar",
 #'            states=3,
-#'            nums = 200,
+#'            nums = 600,
 #'            file_path=".",
 #'            status.names= c("health","hearts & stroke","cancer",
 #'                            "hearts & cancer", "diabetes", "hearts & diabetes",

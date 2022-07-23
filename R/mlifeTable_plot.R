@@ -4,7 +4,7 @@
 #' @param groupby A vector that contains all covariates used for making subgroups.
 #' @param file_path The file path for outputs.
 #' @param X Covariates including age. It should be a data.frame or a matrix.
-#' @param cred credible level. e.g. if \code{cred = 0.92}, we will get the 92\% credible interval.
+#' @param cred Credible level. e.g. if \code{cred = 0.92}, we will get the 92\% credible interval.
 #' @param states The total number of transition states in our data.
 #' @param prop The indicator for proportion plots and tables. If TRUE, this function will output life expectancy proportion plots and tables in addition to orginal life expectancy plots. Default is TRUE. 
 #' @param subgroup.names A vector that contains names of each subgroup. You can also specify them in the output files.
@@ -18,10 +18,10 @@
 #' @examples
 #' \dontrun{
 #' 
-#' mlifeTable_plot(X=lifedata[,-1],status.include = 3,
-#'       groupby = c("male","norcg","cogcg","demcg"), 
+#' mlifeTable_plot(X=lifedata[,-1],status.include = 0,
+#'       groupby = c("male","black","hispanic","other"), 
 #'       cred = 0.92, 
-#'       states = 9,
+#'       states = 3,
 #'       file_path = ".")
 #'       
 #' }

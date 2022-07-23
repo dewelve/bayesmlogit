@@ -42,19 +42,19 @@ life_compare(
 A \code{.csv} file.
 }
 \description{
-A Function for comparing life expectancies of each subgroup. By default, this function will calculate the proportion of samples that have a larger life expectancy or life expectancy proportion in your reference group than other groups.
+A function for comparing life expectancies of each subgroup. By default, this function will calculate the proportion of samples that have a larger life expectancy or life expectancy proportion in your reference group than other groups.
 }
 \examples{
 \dontrun{
 
 #By setting the parameter 'compare' in mlifeTable_plot() to TRUE. We can directly use this function.
 mlifeTable_plot(X=lifedata[,-1],status.include = 3,
-      groupby = c("male","norcg","cogcg","demcg"), 
+      groupby = c("male","black","hispanic","other"), 
       cred = 0.92, 
-      states = 9,
+      states = 3,
       file_path = ".",
       compare = TRUE,
-      ref.var = c("norcg","cogcg","demcg"),
+      ref.var = c("black","hispanic","other"),
       ref.level = c(0,0,0))
 
 }

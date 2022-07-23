@@ -3,19 +3,19 @@
 \docType{data}
 \name{lifedata}
 \alias{lifedata}
-\title{Data for generating life tables.}
+\title{Simplified Data for generating life tables.}
 \format{
-A data frame with 7321 rows and 13 variables:
+A data frame with 7194 rows and 13 variables:
 \describe{
-  \item{trans}{Transition status was recorded in the original data. In this data, we have 72 kinds of transitions in total.}
+  \item{trans}{Transition status was recorded in the original data. In this data, we have 4 kinds of transtions in total.}
   \item{age}{Age for each subject.}
   \item{male}{Sex for each subject. male=1, female=0}
   \item{black,other,hispanic}{Dummy variables for Race.}
-  \item{edu}{Education level. Education is measured as below high school (less than 12 years of education) (edu=1), high school or some college (12-15 years of education) (edu=2), and college or higher (at least 16 years of education) (edu=3).}
-  \item{region}{Region of Birth and residence.}
-  \item{immigrant}{Immigrant status. Immigrant = 1, Not Immigrant = 0.}
+  \item{mar}{Marital status.}
+  \item{educc,educg}{Dummy variables for education level.}
   \item{cohort}{Cohort. Birth cohort, which is birth year minus 1900. }
-  \item{norcg, cogcg, demcg}{Dummy variables for Caregiver Type.}
+  \item{neb,mwb,wb}{Dummy variables for birth regions.}
+  \item{nen,mwn,wn}{Dummy variables for residential regions.}
 }
 }
 \source{
@@ -28,10 +28,8 @@ lifedata
 Data extracted and processed from The Health and Retirement Study (HRS).
 }
 \details{
-Each subject has 9 status in the cohort: 1: health; 2: hearts & stroke; 3: cancer; 4: hearts and cancer; 5: diabetes; 6: hearts and diabetes;
-7: diabetes and cancer; 8: Hearts, cancer and diabetes; 9: death.
-
-Thus, our data will have \code{choose(9,2)*2 = 9*9-9=72} kinds of transition status. To check the transition status for each subject, please use \code{lifedata[,1]}.
+Each subject has 3 status in the cohort: 1: health; 2: unhealthiness; 3: death. 
+Thus we will have 4 kind of possible transitions: 1:health to unhealthiness; 2: health to death; 3: unhealthiness to health; 4: unhealthiness to death. To check the transition status for each subject, please use \code{lifedata[,1]}.
 
 To use this package on your data, please make sure your data have a transition status vector.
 }

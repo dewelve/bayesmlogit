@@ -28,7 +28,7 @@ mlifeTable_plot(
 
 \item{X}{Covariates including age. It should be a data.frame or a matrix.}
 
-\item{cred}{credible level. e.g. if \code{cred = 0.92}, we will get the 92\% credible interval.}
+\item{cred}{Credible level. e.g. if \code{cred = 0.92}, we will get the 92\% credible interval.}
 
 \item{states}{The total number of transition states in our data.}
 
@@ -53,10 +53,10 @@ A Function for posterior means and credible intervals plots.
 \examples{
 \dontrun{
 
-mlifeTable_plot(X=lifedata[,-1],status.include = 3,
-      groupby = c("male","norcg","cogcg","demcg"), 
+mlifeTable_plot(X=lifedata[,-1],status.include = 0,
+      groupby = c("male","black","hispanic","other"), 
       cred = 0.92, 
-      states = 9,
+      states = 3,
       file_path = ".")
       
 }
