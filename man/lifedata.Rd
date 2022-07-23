@@ -5,7 +5,7 @@
 \alias{lifedata}
 \title{Simplified Data for generating life tables.}
 \format{
-A data frame with 6699 rows and 16 variables:
+A data frame with 8015 rows and 16 variables:
 \describe{
   \item{trans}{Transition status was recorded in the original data. In this data, we have 4 kinds of transtions in total.}
   \item{age}{Age for each subject.}
@@ -29,7 +29,7 @@ Data extracted and processed from The Health and Retirement Study (HRS).
 }
 \details{
 Each subject has 3 status in the cohort: 1: health; 2: unhealthiness; 3: death. 
-Thus we will have 4 kind of possible transitions: 1:health to unhealthiness; 2: health to death; 3: unhealthiness to health; 4: unhealthiness to death. To check the transition status for each subject, please use \code{lifedata[,1]}.
+Thus we will have 6 kind of possible transitions: 1:health to health; 2:health to unhealthiness; 3: health to death; 4: unhealthiness to health; 5: unhealthiness to unhealthiness; 6: unhealthiness to death. To check the transition status for each subject, please use \code{lifedata[,1]}.
 
 To use this package on your data, please make sure your data have a transition status vector.
 }
