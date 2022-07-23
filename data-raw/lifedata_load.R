@@ -1,6 +1,6 @@
 library(dplyr)
 
-lifedata<- read.csv("./lifedata.csv")[1:13728,] %>%
+lifedata<- read.csv("./lifedata.csv") %>%
   mutate(black = ifelse(black == 1 & hispanic ==0,1,
                         ifelse(black == 0, 0, NA)),
          other = ifelse(other == 1 & hispanic == 0, 1,

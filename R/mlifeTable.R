@@ -54,9 +54,7 @@
 #'            states=3,
 #'            nums = 600,
 #'            file_path=".",
-#'            status.names= c("health","hearts & stroke","cancer",
-#'                            "hearts & cancer", "diabetes", "hearts & diabetes",
-#'                            "diabetes & cancer", "Hearts, cancer & diabetes"))
+#'            subgroup.names= c("F-W","M-W","F-O","M-B","F-B","F-H","M-O","M-H")
 #'                            
 #' }
 
@@ -200,7 +198,7 @@ mlifeTable <- function(y,X,trans,states,
         if(i==1){
           radix=rowSums(p)
           radix[states]=0
-          if(status!=0){
+          if(status!=0 & is.numeric(status)){
             radix=rep(0,states)
             radix[status]=1
           }
