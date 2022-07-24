@@ -7,7 +7,7 @@
 #' 
 #' To use this package on your data, please make sure your data have a transition status vector.
 #'
-#' @format A data frame with 8015 rows and 16 variables:
+#' @format A data frame with 80146 rows and 16 variables:
 #' \describe{
 #'   \item{trans}{Transition status was recorded in the original data. In this data, we have 4 kinds of transtions in total.}
 #'   \item{age}{Age for each subject.}

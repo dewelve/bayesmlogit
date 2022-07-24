@@ -1,13 +1,15 @@
 library(dplyr)
 
-lifedata<- read.csv("./lifedata.csv")[1:8474,] %>%
+lifedata<- read.csv("./lifedata.csv") %>%
   mutate(black = ifelse(black == 1 & hispanic ==0,1,
-                        ifelse(black == 0, 0, NA)),
+                        ifelse(black == 0, 0, 0)),
          other = ifelse(other == 1 & hispanic == 0, 1,
-                        ifelse(other==0,0,NA))) %>%
-  filter(!is.na(black) & !is.na(other))
+                        ifelse(other==0,0,0)))
   
-
+a <- lifedata %>%
+  filter(trans == 3& male==0)
+b <- lifedata %>%
+  filter(trans == 6 & male==0)
 htoh <- c(1)
 htouh <- c(2:8)
 htod <- c(9)
@@ -27,4 +29,5 @@ lifedata <- lifedata %>%
 
 usethis::use_data(lifedata, overwrite = TRUE)
 
+#write.csv(lifedata, "lifedata2.csv",row.names = F)
 
