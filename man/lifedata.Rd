@@ -5,7 +5,7 @@
 \alias{lifedata}
 \title{Simplified Data for generating life tables.}
 \format{
-A data frame with 80146 rows and 16 variables:
+A data frame with 8198 rows and 16 variables:
 \describe{
   \item{trans}{Transition status was recorded in the original data. In this data, we have 4 kinds of transtions in total.}
   \item{age}{Age for each subject.}

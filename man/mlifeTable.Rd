@@ -72,19 +72,19 @@ X <- data[,-1]
 # this is a long running example.
 # In practical application, please set burn no less than 500 to guarantee the convergence.
 
-out <- bayesmlogit(y, X ,samp=1000, burn=500,verbose=10)
+out <- bayesmlogit(y, X ,samp=1000, burn=500,verbose=10) #About 30 mins
 
 trans <- out$outwstepwidth
 mlifeTable(y,X,trans =trans,
-           groupby = c("male","black","hispanic","other"),
+           groupby = c("male","black","hispanic"),
            vars = "mar",
            states=3,
            nums = 200,
            file_path=".")
 
 # To save time, you can run multiple samplers in parallel. 
-out1 <- bayesmlogit(y, X ,samp=1500, burn=500,verbose=10)
-out2 <- bayesmlogit(y, X ,samp=1500, burn=500,verbose=10)
+out1 <- bayesmlogit(y, X ,samp=1000, burn=500,verbose=10)
+out2 <- bayesmlogit(y, X ,samp=1000, burn=500,verbose=10)
 
 trans <- rbind(out1$outwstepwidth, out2$outwstepwidth)
 
@@ -93,9 +93,9 @@ mlifeTable(y,X,trans =trans,
            groupby = c("male","black","hispanic","other"),
            vars = "mar",
            states=3,
-           nums = 600,
+           nums = 400,
            file_path=".",
-           subgroup.names= c("F-W","M-W","F-O","M-B","F-B","F-H","M-O","M-H")
+           subgroup.names= c("F-W","M-W","F-B","M-B","F-H","M-H")
                            
 }
 }

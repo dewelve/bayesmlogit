@@ -19,7 +19,7 @@
 #' \dontrun{
 #' 
 #' mlifeTable_plot(X=lifedata[,-1],status.include = 0,
-#'       groupby = c("male","black","hispanic","other"), 
+#'       groupby = c("male","black","hispanic"), 
 #'       cred = 0.92, 
 #'       states = 3,
 #'       file_path = ".")

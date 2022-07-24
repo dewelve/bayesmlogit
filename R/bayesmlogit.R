@@ -260,8 +260,8 @@ bayesmlogit.default <- function(y, X,file_path=NA,
   indx <- seq(step.width, samp, step.width)
   out2 <- out[indx, ]
   if(!is.na(file_path)){
-    utils::write.table(out, file=paste(file_path,"/result.txt",sep=''), row.names=FALSE, col.names=FALSE)
-    utils::write.table(out2, file=paste(file_path,"/resultwstep.txt",sep=''), row.names=FALSE, col.names=FALSE)
+    utils::write.csv(out, file=paste(file_path,"/result.csv",sep=''), row.names=FALSE)
+    utils::write.csv(out2, file=paste(file_path,"/resultwstep.csv",sep=''), row.names=FALSE)
   }
   if(trace.plot == TRUE & !is.na(file_path)){
     output.path <- paste(file_path,"/TracePlots",sep ='')
@@ -277,7 +277,7 @@ bayesmlogit.default <- function(y, X,file_path=NA,
     }
   }
   
-  result <- list(out = out, outwstepwidth = out2)
+  result <- list(out = data.frame(out), outwstepwidth = data.frame(out2))
   
   return(result)
 }

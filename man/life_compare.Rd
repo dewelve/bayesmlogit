@@ -49,7 +49,7 @@ A function for comparing life expectancies of each subgroup. By default, this fu
 
 #By setting the parameter 'compare' in mlifeTable_plot() to TRUE. We can directly use this function.
 mlifeTable_plot(X=lifedata[,-1],status.include = 3,
-      groupby = c("male","black","hispanic","other"), 
+      groupby = c("male","black","hispanic"), 
       cred = 0.92, 
       states = 3,
       file_path = ".",
