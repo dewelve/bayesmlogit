@@ -95,7 +95,7 @@ mlifeTable(y,X,trans =trans,
            states=3,
            nums = 400,
            file_path=".",
-           subgroup.names= c("F-W","M-W","F-B","M-B","F-H","M-H")
+           subgroup.names= c("F-W","M-W","M-B","F-B","F-H","M-H")
                            
 }
 }
