@@ -1,5 +1,5 @@
 #' @title Multistate Life Table Method
-#' @description  A Multistate Life Table Method Based on Bayesian Approach.
+#' @description  A Multistate Life Table Method Based on Bayesian Approach. The main part of this function came from the deprecated bayeslogit package. 
 #' @param y A vector of state transitions. For more details, please use \code{?lifedata}.
 #' @param X Covariates matrix. Note that \code{X} must include age as a covariate.
 #' @param samp Sampling times. We suggest a \code{samp} \eqn{\ge} 5000. To save time, we suggest you running multiple samplers in parallel.
@@ -67,7 +67,7 @@ bayesmlogit.default <- function(y, X,file_path=NA,
   y.all <- stats::model.matrix(~ y - 1, data=data_f)
   y <- y.all[,-J.1]
 
-  ##Construct sub-functions
+  ##Construct sub-functions. These codes are all copied from the deprecated bayeslogit package.
   TRUNC = 0.64
 
   mass.texpon <- function(Z)
@@ -202,7 +202,7 @@ bayesmlogit.default <- function(y, X,file_path=NA,
   beta = matrix(0, P, J);
   w    = matrix(0, N, J);
 
-  ## Precompute. (Initialize)
+  ## Precompute. (Initialize). These codes are all copied from the deprecated bayeslogit package.
   n=rep(1,nrow(as.matrix(y)))
   kappa = (y - 0.5)*n;
 

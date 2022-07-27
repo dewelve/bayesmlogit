@@ -47,7 +47,7 @@ A list that contains two arrays:
 The number of columns in both arrays is determined by the number of covariates in X and the number of unique transition status in y. e.g. if we have 12 covariates in X and 36 unique transition status in y, our result will contain (12+1)*(36-1)= 455 columns in total.
 }
 \description{
-A Multistate Life Table Method Based on Bayesian Approach.
+A Multistate Life Table Method Based on Bayesian Approach. The main part of this function came from the deprecated bayeslogit package.
 }
 \examples{
 \dontrun{
