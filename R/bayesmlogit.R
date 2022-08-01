@@ -1,13 +1,13 @@
 #' @title Multistate Life Table Method
 #' @description  A Multistate Life Table Method Based on Bayesian Approach. The main part of this function came from the deprecated bayeslogit package. 
 #' @param y A vector of state transitions. For more details, please use \code{?lifedata}.
-#' @param X Covariates matrix. Note that \code{X} must include age as a covariate.
+#' @param X A matrix of covariates. Note that \code{X} must include age as a covariate.
 #' @param samp Sampling times. We suggest a \code{samp} \eqn{\ge} 5000. To save time, we suggest you running multiple samplers in parallel.
 #' @param burn 'burn-in' times. To guarantee the convergence of our samples, we suggest a \code{burn} \eqn{\ge} 500. 
-#' @param verbose progress report. Default is 10, which means this function will report the current progress after every 10 samples.
+#' @param verbose Progress report. Default is 10, which means this function will report the current progress after every 10 samples.
 #' @param m.0 Initial matrix for MCMC methods.
 #' @param P.0 Initial matrix for MCMC methods.
-#' @param step.width The sampling interval to reduce the autocorrelation. e.g. if \code{step.width = 5}, this function will pick one sample from every 5 samples and generate a new data set named \code{outwstepwidth.txt}. Default is 5.
+#' @param step.width The sampling interval to reduce the autocorrelation. e.g. if \code{step.width = 5}, this function will pick one sample from every 5 samples and generate a new data set named as \code{outwstepwidth.txt}. Default is 5.
 #' @param trace.plot The indicator for generating trace plots. If TRUE, this function will create a new directory under given \code{file_path} and output corresponding trace plots using samples after burn-in.
 #' @param file_path The file path for outputs. If a path is specified, the result will also be saved in the given file path. You can find two files in the specified file: \code{result.txt} and \code{resultwstep.txt}. The first one contains all samples generated after burn-in. The latter is sampled from the first one with a sampling interval. 
 #' @import stats grDevices

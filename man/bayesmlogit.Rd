@@ -20,7 +20,7 @@ bayesmlogit(
 \arguments{
 \item{y}{A vector of state transitions. For more details, please use \code{?lifedata}.}
 
-\item{X}{Covariates matrix. Note that \code{X} must include age as a covariate.}
+\item{X}{A matrix of covariates. Note that \code{X} must include age as a covariate.}
 
 \item{file_path}{The file path for outputs. If a path is specified, the result will also be saved in the given file path. You can find two files in the specified file: \code{result.txt} and \code{resultwstep.txt}. The first one contains all samples generated after burn-in. The latter is sampled from the first one with a sampling interval.}
 
@@ -32,9 +32,9 @@ bayesmlogit(
 
 \item{burn}{'burn-in' times. To guarantee the convergence of our samples, we suggest a \code{burn} \eqn{\ge} 500.}
 
-\item{verbose}{progress report. Default is 10, which means this function will report the current progress after every 10 samples.}
+\item{verbose}{Progress report. Default is 10, which means this function will report the current progress after every 10 samples.}
 
-\item{step.width}{The sampling interval to reduce the autocorrelation. e.g. if \code{step.width = 5}, this function will pick one sample from every 5 samples and generate a new data set named \code{outwstepwidth.txt}. Default is 5.}
+\item{step.width}{The sampling interval to reduce the autocorrelation. e.g. if \code{step.width = 5}, this function will pick one sample from every 5 samples and generate a new data set named as \code{outwstepwidth.txt}. Default is 5.}
 
 \item{trace.plot}{The indicator for generating trace plots. If TRUE, this function will create a new directory under given \code{file_path} and output corresponding trace plots using samples after burn-in.}
 }

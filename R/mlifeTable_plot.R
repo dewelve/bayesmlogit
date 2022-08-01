@@ -3,7 +3,7 @@
 #' @param status.include The status we aim to calculate. It can be a number or a vector. Default is 0, which means we'll consider all status. 
 #' @param groupby A vector that contains all covariates used for making subgroups.
 #' @param file_path The file path for outputs.
-#' @param X Covariates including age. It should be a data.frame or a matrix.
+#' @param X A matrix of covariates. Note that X must include age as a convariate.
 #' @param cred Credible level. e.g. if \code{cred = 0.92}, we will get the 92\% credible interval.
 #' @param states The total number of transition states in our data.
 #' @param prop The indicator for proportion plots and tables. If TRUE, this function will output life expectancy proportion plots and tables in addition to orginal life expectancy plots. Default is TRUE. 
@@ -14,7 +14,7 @@
 #' @param ... Extra parameters for \code{life_compare()}. For details, please use \code{?life_compare()}.
 #' @import ggplot2 utils stats
 #' @export
-#' @return Plots and tables for posterior means and credible intervals of each subgroups
+#' @return Plots and tables for posterior means and credible intervals of each subgroups.
 #' @examples
 #' \dontrun{
 #' 

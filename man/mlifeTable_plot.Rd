@@ -26,7 +26,7 @@ mlifeTable_plot(
 
 \item{file_path}{The file path for outputs.}
 
-\item{X}{Covariates including age. It should be a data.frame or a matrix.}
+\item{X}{A matrix of covariates. Note that X must include age as a convariate.}
 
 \item{cred}{Credible level. e.g. if \code{cred = 0.92}, we will get the 92\% credible interval.}
 
@@ -45,7 +45,7 @@ mlifeTable_plot(
 \item{...}{Extra parameters for \code{life_compare()}. For details, please use \code{?life_compare()}.}
 }
 \value{
-Plots and tables for posterior means and credible intervals of each subgroups
+Plots and tables for posterior means and credible intervals of each subgroups.
 }
 \description{
 A Function for posterior means and credible intervals plots.
