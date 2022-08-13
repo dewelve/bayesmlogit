@@ -5,59 +5,69 @@
 \title{Plot life expectancies}
 \usage{
 mlifeTable_plot(
-  status.include = 0,
+  state.include = 0,
   groupby,
   file_path,
   X,
-  cred = 0.92,
+  cred = 0.84,
   states,
   prop = TRUE,
   subgroup.names = NULL,
-  status.names = NA,
+  state.names = NA,
   compare = FALSE,
   midpoint.type = "mean",
   ...
 )
 }
 \arguments{
-\item{status.include}{The status we aim to calculate. It can be a number or a vector. Default is 0, which means we'll consider all status.}
+\item{state.include}{A vector or a number used to specify the states whose expectancy years are of interest. Default is 0, which means we'll generate plots for all states. For multiple states specified, we will get the expectancy years for each state and their sum.}
 
-\item{groupby}{A vector that contains all covariates used for making subgroups.}
+\item{groupby}{A vector that contains covariates for subgroup comparisons. It can be inherited from \code{mlifetable()}.}
 
-\item{file_path}{The file path for outputs.}
+\item{file_path}{The file path for outputs. It can be inherited from \code{mlifetable()}.}
 
-\item{X}{A matrix of covariates. Note that X must include age as a convariate.}
+\item{X}{A matrix of covariates. Note that X must include age as a convariate. It can be inherited from \code{mlifetable()}.}
 
-\item{cred}{Credible level. e.g. if \code{cred = 0.92}, we will get the 92\% credible interval.}
+\item{cred}{Credible level. For example, if \code{cred = 0.84}, we will get the 84\% credible interval.}
 
-\item{states}{The total number of transition states in our data.}
+\item{states}{The total number of states in data. It can be inherited from \code{mlifetable()}.}
 
-\item{prop}{The indicator for proportion plots and tables. If TRUE, this function will output life expectancy proportion plots and tables in addition to orginal life expectancy plots. Default is TRUE.}
+\item{prop}{If TRUE, this function will output life expectancy proportion plots and tables in addition to original life expectancy plots. Default is TRUE.}
 
 \item{subgroup.names}{A vector that contains names of each subgroup. You can also specify them in the output files.}
 
-\item{status.names}{A vector used to specify names of each status except death.}
+\item{state.names}{A vector used to specify names of each state except death. It can be inherited from \code{mlifetable()}.}
 
-\item{compare}{An indicator for generating comparsion results. If TRUE, this function will quote \code{life_compare()} and generate a table with all comparsion results based on the reference variables and reference levels you defined.}
+\item{compare}{If TRUE, this function will quote \code{life_compare()} and generate a table with all comparsion results based on the reference variables and reference levels specified. Default is FALSE.}
 
-\item{midpoint.type}{The indicator for credible interval plots. Can be either "mean" or "median". Default is "mean", which means the plots will use mean values as the middle point.}
+\item{midpoint.type}{A character used to specify the midpoint type for credible interval plots. Can be either "mean" or "median". Default is "mean", which means the plots will use mean values as the middle point.}
 
-\item{...}{Extra parameters for \code{life_compare()}. For details, please use \code{?life_compare()}.}
+\item{...}{Extra parameters for \code{life_compare()}. See details using \code{?life_compare()}.}
 }
 \value{
 Plots and tables for posterior means and credible intervals of each subgroups.
 }
 \description{
-A Function for posterior means and credible intervals plots.
+A function for plotting posterior means and their credible intervals. Can also be used as a subfunction in \code{mlifetable()}.
 }
 \examples{
 \dontrun{
 
-mlifeTable_plot(X=lifedata[,-1],status.include = 0,
+#Generate plots and corresponding tables only.
+mlifeTable_plot(X=lifedata[,-1],state.include = 0,
       groupby = c("male","black","hispanic"), 
-      cred = 0.92, 
+      cred = 0.84, 
       states = 3,
       file_path = ".")
       
+#Additionally generate the comparsion results to the reference level.
+mlifeTable_plot(X=lifedata[,-1],state.include = 0,
+      groupby = c("male","black","hispanic"), 
+      cred = 0.84, 
+      states = 3,
+      file_path = ".",
+      compare = TRUE,
+      ref.var = c("black","hispanic"),
+      ref.level = c(0,0))
 }
 }

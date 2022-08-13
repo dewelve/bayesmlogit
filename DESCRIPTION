@@ -1,7 +1,7 @@
 Package: bayesmlogit
 Type: Package
 Title: A Multistate life table (MSLT) methodology based on Bayesian approach
-Version: 0.1.0
+Version: 1.0.0
 Authors@R: 
     c(person(given = "Emma",
              family = "Zang",
@@ -10,7 +10,11 @@ Authors@R:
       person(given = "Xuezhixing",
              family = "Zhang",
              role = c("aut", "cre"),
-             email = "xuezhixing.zhang@yale.edu"))
+             email = "xuezhixing.zhang@yale.edu"),
+	  person(given = "Scott",
+             family = "Lynch",
+             role = c("aut","cph"),
+             email = "scott.lynch@duke.edu"))
 Maintainer: Xuezhixing Zhang <xuezhixing.zhang@yale.edu>
 Description: Create life tables with Bayesian approach, which can be very useful for modelling a complex health process when considering multiple predisposing factors and multiple coexisting health conditions.
 License: GPL (>= 3)

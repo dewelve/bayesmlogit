@@ -2,8 +2,8 @@
 #'
 #' Data extracted and processed from The Health and Retirement Study (HRS). 
 #' 
-#' Each subject has 3 status in the cohort: 1: health; 2: unhealthiness; 3: death. 
-#' Thus we will have 6 kind of possible transitions: 1:health to health; 2:health to unhealthiness; 3: health to death; 4: unhealthiness to health; 5: unhealthiness to unhealthiness; 6: unhealthiness to death. To check the transition status for each subject, please use \code{lifedata[,1]}.
+#' Each subject has 3 states in the cohort: 1: health; 2: unhealthiness; 3: death. 
+#' Thus we will have 6 kind of possible transitions: 1:health to health; 2:health to unhealthiness; 3: health to death; 4: unhealthiness to health; 5: unhealthiness to unhealthiness; 6: unhealthiness to death. To check the transition for each subject, please use \code{lifedata[,1]}.
 #' 
 #' To use this package with your data, please make sure your data have a vector for transitions.
 #'

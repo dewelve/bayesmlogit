@@ -6,25 +6,25 @@
 \usage{
 life_compare(
   file_path,
-  file,
-  status.include = 0,
+  file = paste(file_path, "/mplotResults", sep = ""),
+  state.include = 0,
   states,
   ref.var,
   ref.level,
   index.matrix,
   prop = TRUE,
   criterion = ">",
-  status.names = NA
+  state.names = NA
 )
 }
 \arguments{
-\item{file_path}{The file path for reading data.}
+\item{file_path}{The file path for reading data. It can be inherited from \code{mlifetable_plot()}.}
 
-\item{file}{The file path for outputs.}
+\item{file}{The file path for outputs. Default is \code{paste(file_path,"/mplotResults",sep='')}.}
 
-\item{status.include}{The status we aim to compare. It can be a number or a vector. Default is 0, which means we'll consider all status.}
+\item{state.include}{The status we aim to compare. It can be a number or a vector. Default is 0, which means we'll consider all states. It can be inherited from \code{mlifetable_plot()}.}
 
-\item{states}{The total number of transition states in our data.}
+\item{states}{The total number of transition states in our data. It can be inherited from \code{mlifetable_plot()}.}
 
 \item{ref.var}{A vector that contains all covariates used as reference variables when comparing each subgroup.}
 
@@ -32,14 +32,14 @@ life_compare(
 
 \item{index.matrix}{A matrix that generated in \code{mlifeTable_plot()}. You don't need to specify it when using \code{mlifeTable_plot()}.}
 
-\item{prop}{The indicator for proportion plots and tables. If TRUE, this function will output life expectancy proportion plots and tables in addition to orginal life expectancy plots. Default is TRUE.}
+\item{prop}{If TRUE, this function will output the comparision reulsts of life expectancy proportions in addition to orginal comparison results. Default is TRUE. It can be inherited from \code{mlifetable_plot()}.}
 
 \item{criterion}{The criterion for comparison, which can be either ">" or "<". Default is ">".}
 
-\item{status.names}{A vector used to specify names of each status except death.}
+\item{state.names}{A vector used to specify names of each state except death. It can be inherited from \code{mlifetable_plot()}.}
 }
 \value{
-A \code{.csv} file.
+A \code{.csv} file with comparison results.
 }
 \description{
 A function for comparing life expectancies of each subgroup. By default, this function will calculate the proportion of samples that have a larger life expectancy or life expectancy proportion in your reference group than other groups.
@@ -48,14 +48,14 @@ A function for comparing life expectancies of each subgroup. By default, this fu
 \dontrun{
 
 #By setting the parameter 'compare' in mlifeTable_plot() to TRUE. We can directly use this function.
-mlifeTable_plot(X=lifedata[,-1],status.include = 3,
+mlifeTable_plot(X=lifedata[,-1],state.include = 3,
       groupby = c("male","black","hispanic"), 
       cred = 0.92, 
       states = 3,
       file_path = ".",
       compare = TRUE,
       ref.var = c("black","hispanic"),
-      ref.level = c(0,0,0))
+      ref.level = c(0,0))
 
 }
 }
