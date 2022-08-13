@@ -29,7 +29,7 @@
 #' 
 #' # This example will take about 30 mins.
 #' 
-#' out <- bayesmlogit(y, X ,samp=1000, burn=500,verbose=10) #About 30 mins
+#' out <- bayesmlogit(y, X ,samp=1000, burn=500,verbose=10) 
 #'
 #' trans <- out$outwstepwidth
 #' mlifeTable(y,X,trans =trans,

@@ -43,9 +43,7 @@ bayesmlogit.default <- function(y, X,file_path=NA,
                    trace.plot=FALSE)
 
 {
-  
-  m.0=array(0, dim=c(ncol(X), ncol(y)))
-  P.0=array(0, dim=c(ncol(X), ncol(X), ncol(y)))
+
   ##Pre-process
   y.1 <- sort(unique(y))
   y <- match(y,y.1)
@@ -184,7 +182,9 @@ bayesmlogit.default <- function(y, X,file_path=NA,
   ## X - N x P design matrix
   ## n - N x 1 matrix of rolls
   ## Assume beta_J = 0 for identification.
-
+  m.0=array(0, dim=c(ncol(X), ncol(y)))
+  P.0=array(0, dim=c(ncol(X), ncol(X), ncol(y)))
+  
   N = nrow(X);
   P = ncol(X);
   J = ncol(y) + 1;
