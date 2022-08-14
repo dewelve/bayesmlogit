@@ -132,11 +132,10 @@ mlifeTable_plot.default <- function(state.include = 0,
                          sep="")
       
       data <- utils::read.table(file_name, header = TRUE)
-      colnum <- dim(data)[2]
       index <- index.matrix[i,]
       
       ##Total life expectancy
-      ttle <- rowSums(data[,1:(colnum)])
+      ttle <- rowSums(data[,1:(states-1)])
       if(midpoint.type == "mean"){
         row1 <- c(mean(ttle),stats::quantile(ttle, c((1-cred)/2, (1+cred)/2)))
       }
@@ -146,7 +145,7 @@ mlifeTable_plot.default <- function(state.include = 0,
       
       total[i,] <- row1
       ##Calculate posterior means/medians and credible intervals for each status
-      for(j in 1:(states)){
+      for(j in 1:(states-1)){
         if(midpoint.type == "mean"){
           life.list[[j]][i,] <- c(mean(data[,j]),stats::quantile(data[,j], c((1-cred)/2, (1+cred)/2)))
           life.list.prop[[j]][i,] <- c(mean(data[,j]/ttle),stats::quantile(data[,j]/ttle, c((1-cred)/2, (1+cred)/2)))
@@ -164,6 +163,7 @@ mlifeTable_plot.default <- function(state.include = 0,
     tables_plots_1(index.dim,
                    index.matrix,
                    states,
+                   state.include,
                    life.list,
                    life.list.prop,
                    file,
@@ -199,12 +199,11 @@ mlifeTable_plot.default <- function(state.include = 0,
                          sep="")
       
       data <- utils::read.table(file_name,header = TRUE)
-      colnum <- dim(data)[2]
       index <- index.matrix[i,]
       
       if(length(state.include)>1){
         ##Total life expectancy
-        ttle <- rowSums(data[,1:(colnum)])
+        ttle <- rowSums(data[,state.include])
         if(midpoint.type == "mean"){
           row1 <- c(mean(ttle),stats::quantile(ttle, c((1-cred)/2, (1+cred)/2)))
         }
@@ -214,25 +213,26 @@ mlifeTable_plot.default <- function(state.include = 0,
         
         total[i,] <- row1
         ##Calculate posterior means/medians and credible intervals for each status
-        for(j in 1:(states)){
+        for(j in 1:length(state.include)){
           if(midpoint.type == "mean"){
-            life.list[[j]][i,] <- c(mean(data[,j]),stats::quantile(data[,j], c((1-cred)/2, (1+cred)/2)))
-            life.list.prop[[j]][i,] <- c(mean(data[,j]/ttle),stats::quantile(data[,j]/ttle, c((1-cred)/2, (1+cred)/2)))
+            life.list[[j]][i,] <- c(mean(data[,state.include[j]]),stats::quantile(data[,state.include[j]], c((1-cred)/2, (1+cred)/2)))
+            life.list.prop[[j]][i,] <- c(mean(data[,state.include[j]]/ttle),stats::quantile(data[,state.include[j]]/ttle, c((1-cred)/2, (1+cred)/2)))
           }
           else if(midpoint.type == "median"){
-            life.list[[j]][i,] <- c(median(data[,j]),stats::quantile(data[,j], c((1-cred)/2, (1+cred)/2)))
-            life.list.prop[[j]][i,] <- c(median(data[,j]/ttle),stats::quantile(data[,j]/ttle, c((1-cred)/2, (1+cred)/2)))
+            life.list[[j]][i,] <- c(median(data[,state.include[j]]),stats::quantile(data[,state.include[j]], c((1-cred)/2, (1+cred)/2)))
+            life.list.prop[[j]][i,] <- c(median(data[,state.include[j]]/ttle),stats::quantile(data[,state.include[j]]/ttle, c((1-cred)/2, (1+cred)/2)))
           }
         }
       }
+      
       else{
         ##Calculate posterior means/medians and credible intervals for each status
         for(j in 1:length(state.include)){
           if(midpoint.type == "mean"){
-            life.list[[j]][i,] <- c(mean(data[,j]),stats::quantile(data[,j], c((1-cred)/2, (1+cred)/2)))
+            life.list[[j]][i,] <- c(mean(data[,state.include[j]]),stats::quantile(data[,state.include[j]], c((1-cred)/2, (1+cred)/2)))
           }
           else if(midpoint.type == "median"){
-            life.list[[j]][i,] <- c(median(data[,j]),stats::quantile(data[,j], c((1-cred)/2, (1+cred)/2)))
+            life.list[[j]][i,] <- c(median(data[,state.include[j]]),stats::quantile(data[,state.include[j]], c((1-cred)/2, (1+cred)/2)))
           }
         }
       }
@@ -352,7 +352,7 @@ tables_plots_1 <- function(index.dim,
         ggplot2::geom_errorbarh(height = 0) +
         ggplot2::theme_light() + 
         ggplot2::labs(x = "Extectancy years of remaining life", y = "Subgroup", title = "Total life expectancy for each subgroup")  
-      ggplot2::ggsave(paste(paste(file,"/life_expectancy_","status_",output.names[i],sep=''),
+      ggplot2::ggsave(paste(paste(file,"/life_expectancy_","state_",output.names[i],sep=''),
                             ".png",
                             sep=""),
                       width=10,height = 6.18,units="in")

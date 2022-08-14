@@ -86,6 +86,7 @@ mlifeTable <- function(y,X,trans,states,
   vars.group <- groupby
   vars.other <- setdiff(cols,groupby)
   trans <- data.frame(trans)
+  
   ##Construct index matrix
   if(!is.na(vars.group[1])){
     if(length(vars.group)>1){
@@ -249,6 +250,7 @@ mlifeTable <- function(y,X,trans,states,
       ex[(length(ages)),]=Tx[(length(ages)),]/sum(lx[(length(ages)),1:(ncol(lx)-1)])
 
       #save only e0
+      e[reps,]=ex[1,]
       #print(c(index.matrix[index,],reps))
       
     }
