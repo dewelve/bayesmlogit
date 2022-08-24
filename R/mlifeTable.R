@@ -224,7 +224,7 @@ mlifeTable <- function(y,X,trans,states,
           lx[i+1,]=lx[i,]%*%p
           
           #generate Lx from lx and lx+1
-          Lx[i,]=0.5*age.gap*lx[i,]+lx[(i+1),]
+          Lx[i,]=0.5*age.gap*(lx[i,]+lx[(i+1),])
         }
         
         ######to close out life table Lx
