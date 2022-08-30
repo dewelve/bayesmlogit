@@ -82,6 +82,7 @@ mlifeTable <- function(y,X,trans,states,
   ##Subgroup
   age.index <- which(colnames(as.data.frame(X)) %in% "age" ==TRUE)
   data <- as.data.frame(X[,-age.index])
+  colnames(data) <- colnames(X)[-age.index]
   cols <- colnames(data)
   vars.group <- groupby
   vars.other <- setdiff(cols,groupby)
@@ -94,6 +95,7 @@ mlifeTable <- function(y,X,trans,states,
       index.matrix <- sapply(unique(data[,vars.group]),as.character)
     }
     else{
+      
       data.group.list <- list(data[,vars.group])
       names(data.group.list) <- vars.group
       index.matrix <- as.matrix(sapply(unique(data[,vars.group]),as.character))
@@ -170,6 +172,8 @@ mlifeTable <- function(y,X,trans,states,
         
         covariates <- matrix(c(1,append(values, ages[i], after=(age.index-1)))
                              ,1,length(cols)+2)
+        # covariates <- matrix(c(append(values, ages[i], after=(age.index-1)),1)
+        #                      ,1,length(cols)+2)
 
         c_length <- ncol(covariates)
         
@@ -211,6 +215,7 @@ mlifeTable <- function(y,X,trans,states,
             radix[status]=1
           }
           lx=matrix(radix,length(ages),states,byrow=T)
+          
           Lx=Tx=ex=matrix(0,length(ages),states)
         }
         
@@ -225,14 +230,17 @@ mlifeTable <- function(y,X,trans,states,
           
           #generate Lx from lx and lx+1
           Lx[i,]=0.5*age.gap*(lx[i,]+lx[(i+1),])
+          
         }
         
         ######to close out life table Lx
         if(i==length(ages)){
+          
           Lxx=age.gap*lx[(length(ages)),1:(nrow(p)-1)]%*%solve(diag(nrow(p)-1)-p[1:(states-1),1:(states-1)])
           Lx[(length(ages)),]=cbind(Lxx,c(0))
+          #print(lx)
+          # Lx[(length(ages)),]=age.gap*lx[(length(ages)),]%*%solve(p)
           
-          #Lx[(length(ages)),]=age.gap*lx[(length(ages)),]%*%solve(p)
         }
         
         #lx shows the mortality.
