@@ -60,6 +60,6 @@ CreatTrans2 <- function(Age,State,Death,states){
   for(i in 1:(length(temp$state)-1)){
     trans[i+1] <- (index[i]-1)*reps+(index[i+1]-1)
   }
-  
+  trans <- trans+1
   return(trans)
 }
