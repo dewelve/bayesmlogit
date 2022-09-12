@@ -27,9 +27,9 @@ mlifeTable(
 
 \item{X}{A matrix of covariates. Note that \code{X} must include age as a convariate.}
 
-\item{trans}{The posterior samples generated using \code{bayesmlogit()}.}
+\item{trans}{The posterior samples generated using \code{?bayesmlogit()}.}
 
-\item{states}{The total number of states in the data.}
+\item{states}{The total number of states in data.}
 
 \item{file_path}{The file path for outputs.}
 
@@ -51,7 +51,7 @@ mlifeTable(
 
 \item{state.names}{A vector used to specify names of each state except death. You can also specify them in the output files.}
 
-\item{...}{Extra parameters for \code{mlifeTable_plot()}. See more details using \code{?lifedata}.}
+\item{...}{Extra parameters for \code{mlifeTable_plot()}. See more details using \code{?mlifeTable_plot()}.}
 }
 \value{
 Life tables for each subgroup.
@@ -105,4 +105,7 @@ mlifeTable(y,X,trans =trans,
            cred = 0.84)
                            
 }
+}
+\seealso{
+\code{\link{bayesmlogit}}, \code{\link{mlifeTable_plot}}
 }

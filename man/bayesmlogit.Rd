@@ -16,7 +16,7 @@ bayesmlogit(
 )
 }
 \arguments{
-\item{y}{A vector of state transitions. See more details using \code{?lifedata}.}
+\item{y}{A vector of state transitions, which can be created either manually or with \code{CreateTrans()}. See more details using \code{?lifedata}.}
 
 \item{X}{A matrix of covariates. Note that \code{X} must include age as a covariate.}
 
@@ -54,4 +54,7 @@ out <- bayesmlogit(y, X ,samp=1000, burn=500,verbose=10)
 
 
 }
+}
+\seealso{
+\code{\link{mlifeTable}}, \code{\link{lifedata}}, \code{\link{CreateTrans}}
 }

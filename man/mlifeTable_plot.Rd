@@ -71,3 +71,6 @@ mlifeTable_plot(X=lifedata[,-1],state.include = 0,
       ref.level = c(0,0))
 }
 }
+\seealso{
+\code{\link{mlifeTable}}, \code{\link{life_compare}}
+}

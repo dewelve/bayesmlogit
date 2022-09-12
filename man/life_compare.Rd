@@ -24,7 +24,7 @@ life_compare(
 
 \item{state.include}{The status we aim to compare. It can be a number or a vector. Default is 0, which means we'll consider all states. It can be inherited from \code{mlifetable_plot()}.}
 
-\item{states}{The total number of transition states in our data. It can be inherited from \code{mlifetable_plot()}.}
+\item{states}{The total number of states in data. It can be inherited from \code{mlifetable_plot()}.}
 
 \item{ref.var}{A vector that contains all covariates used as reference variables when comparing each subgroup.}
 
@@ -58,4 +58,7 @@ mlifeTable_plot(X=lifedata[,-1],state.include = 3,
       ref.level = c(0,0))
 
 }
+}
+\seealso{
+\code{\link{mlifeTable_plot}}
 }

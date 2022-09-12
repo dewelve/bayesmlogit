@@ -12,7 +12,9 @@
 #' @param state.names A vector used to specify names of each state except death. It can be inherited from \code{mlifetable()}.
 #' @param midpoint.type A character used to specify the midpoint type for credible interval plots. Can be either "mean" or "median". Default is "mean", which means the plots will use mean values as the middle point.
 #' @param ... Extra parameters for \code{life_compare()}. See details using \code{?life_compare()}.
-#' @import ggplot2 utils stats
+#' @seealso \code{\link{mlifeTable}}, \code{\link{life_compare}}
+#' @import ggplot2 utils
+#' @importFrom stats quantile median
 #' @export
 #' @return Plots and tables for posterior means and credible intervals of each subgroups.
 #' @examples

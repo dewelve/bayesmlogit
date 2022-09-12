@@ -2,8 +2,8 @@
 #' @description  A Bayesian Multistate Life Table Method for survey data, developed by Lynch and Zang (2022), allowing for large state spaces with quasi-absorbing states (i.e., structural zeros in a transition matrix). This package generates life tables based on the estimates from the Bayesian multinomial logit regressions, which can be obtained using the \code{bayesmlogit()} function. The values in the generated life table represent the expected remaining years to be spent in each state conditional on a give age. Current version was designed to only generate life tables based on data with a death state.
 #' @param y A vector of transitions.
 #' @param X A matrix of covariates. Note that \code{X} must include age as a convariate.
-#' @param trans The posterior samples generated using \code{bayesmlogit()}.
-#' @param states The total number of states in the data.
+#' @param trans The posterior samples generated using \code{?bayesmlogit()}.
+#' @param states The total number of states in data.
 #' @param file_path The file path for outputs.
 #' @param groupby A vector that contains the covariates for subgroup comparisons. Default is NA, which means we won't make subgroups.
 #' @param vars The covariates considered in subgroup analysis. For covariates that are not specified in vars, we will consider them have the same effect in each subgroup. Please make sure you have specified at least one variable otherwise the life tables would be the same. Default is NA.
@@ -14,7 +14,8 @@
 #' @param nums Number of life tables generated for each subgroup. Default is the size of posterior samples we used.
 #' @param mlifeTable_plot If TRUE, this option will create a new directory \code{mplotResults} under given \code{file_path} and output corresponding plots and tables for posterior means and credible intervals. Default is FALSE. 
 #' @param state.names A vector used to specify names of each state except death. You can also specify them in the output files.
-#' @param ... Extra parameters for \code{mlifeTable_plot()}. See more details using \code{?lifedata}.
+#' @param ... Extra parameters for \code{mlifeTable_plot()}. See more details using \code{?mlifeTable_plot()}.
+#' @seealso \code{\link{bayesmlogit}}, \code{\link{mlifeTable_plot}}
 #' @import utils
 #' @export
 #' @return Life tables for each subgroup.

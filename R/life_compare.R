@@ -4,12 +4,13 @@
 #' @param ref.var A vector that contains all covariates used as reference variables when comparing each subgroup.
 #' @param file_path The file path for reading data. It can be inherited from \code{mlifetable_plot()}.
 #' @param file The file path for outputs. Default is \code{paste(file_path,"/mplotResults",sep='')}.
-#' @param states The total number of transition states in our data. It can be inherited from \code{mlifetable_plot()}.
+#' @param states The total number of states in data. It can be inherited from \code{mlifetable_plot()}.
 #' @param ref.level A vector that declares the reference value of each reference variable.
 #' @param index.matrix A matrix that generated in \code{mlifeTable_plot()}. You don't need to specify it when using \code{mlifeTable_plot()}.
 #' @param state.names A vector used to specify names of each state except death. It can be inherited from \code{mlifetable_plot()}.
 #' @param prop If TRUE, this function will output the comparision reulsts of life expectancy proportions in addition to orginal comparison results. Default is TRUE. It can be inherited from \code{mlifetable_plot()}.
 #' @param criterion The criterion for comparison, which can be either ">" or "<". Default is ">".
+#' @seealso \code{\link{mlifeTable_plot}}
 #' @import utils
 #' @export
 #' @return A \code{.csv} file with comparison results.

@@ -1,6 +1,6 @@
 #' @title Multistate Life Table Method
 #' @description  A Bayesian Multistate Life Table Method for survey data, developed by Lynch and Zang (2022), allowing for large state spaces with quasi-absorbing states (i.e., structural zeros in a transition matrix). This function conducts Bayesian multinomial logistic regressions using Polya-Gamma latent variables (Polson 2013),nd should be jointly used with the \code{mlifetable()} function, which will generate life tables based on the estimates from the Bayesian multinomial logit regressions. 
-#' @param y A vector of state transitions. See more details using \code{?lifedata}.
+#' @param y A vector of state transitions, which can be created either manually or with \code{CreateTrans()}. See more details using \code{?lifedata}.
 #' @param X A matrix of covariates. Note that \code{X} must include age as a covariate.
 #' @param samp Number of posterior samples. For efficiency purposes, if you need a large sample (e.g., \eqn{\ge}5000), we recommend parallel computing in a cluster.
 #' @param burn 'burn-in' period. Default is 500.  
@@ -8,7 +8,9 @@
 #' @param step.width The sampling interval to reduce autocorrelation. For example, if \code{step.width = 5}, this function will select 1 from every 5 posterior samples and generate a new dataset named \code{outwstepwidth.txt}. Default is 5.
 #' @param trace.plot If TRUE, this function will create a new directory under given \code{file_path} and output corresponding trace plots using samples after burn-in.
 #' @param file_path The file path for outputs. If a path is specified, the result will also be saved in the given file path. You can find two result files in the specified file: \code{result.txt} and \code{resultwstep.txt}. The former contains all posterior samples generated after burn-in. The latter is sampled from the former one with a specified sampling interval. 
-#' @import stats grDevices
+#' @seealso \code{\link{mlifeTable}}, \code{\link{lifedata}}, \code{\link{CreateTrans}}
+#' @import grDevices
+#' @importFrom stats model.matrix pnorm runif rexp rnorm
 #' @export
 #' @return  
 #' A list that contains two arrays:
@@ -240,9 +242,6 @@ bayesmlogit.default <- function(y, X,file_path=NA,
       }
     }
     if (i %% verbose == 0) {
-      #time2 <- Sys.time()
-      #time <- time2 - time1
-      #time1 <- Sys.time()
       cat("Finished", i,"/",burn+samp,"\n")
       
     }
