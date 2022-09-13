@@ -181,13 +181,13 @@ mlifeTable <- function(y,X,trans,states,
         xb <- covariates%*%matrix(as.numeric(b),c_length,length(g)/c_length)
         
         tp <- matrix(0,length(xb)+1)
-        denom <- 1+sum(exp(xb))
+        denom <- 1+sum(exp(xb),na.rm = T)
         
         for(j in 1:length(xb)){
           tp[j] <- exp(xb[j])/denom
         }
         
-        tp[length(xb)+1]=1-sum(tp)
+        tp[length(xb)+1]=1-sum(tp,na.rm = T)
         
         p=matrix(c(rep(0,states-1),1),states,states,byrow=T)
         
@@ -201,12 +201,16 @@ mlifeTable <- function(y,X,trans,states,
             count=count+1
 
             if(pos[m]==count | m>length(pos)){
-              p[j,k]=tp[m]
+              p[j,k]=ifelse(is.na(tp[m]),
+                            ifelse(k==states,10e-10,0)
+                            ,tp[m])
+              # p[j,k]=tp[m]
               m=m+1
             }
           }
         }
         
+
         #establish radix
         if(i==1){
           radix=rowSums(p)
@@ -218,10 +222,11 @@ mlifeTable <- function(y,X,trans,states,
           lx=matrix(radix,length(ages),states,byrow=T)
           
           Lx=Tx=ex=matrix(0,length(ages),states)
+          
         }
         
         for(j in 1:(states-1)){
-          p[j,]=p[j,]/sum(p[j,])
+          p[j,]=p[j,]/sum(p[j,],na.rm = T)
         }
         
         
@@ -233,12 +238,13 @@ mlifeTable <- function(y,X,trans,states,
           Lx[i,]=0.5*age.gap*(lx[i,]+lx[(i+1),])
           
         }
-        
+       
         ######to close out life table Lx
         if(i==length(ages)){
           
           Lxx=age.gap*lx[(length(ages)),1:(nrow(p)-1)]%*%solve(diag(nrow(p)-1)-p[1:(states-1),1:(states-1)])
           Lx[(length(ages)),]=cbind(Lxx,c(0))
+         
           #print(lx)
           # Lx[(length(ages)),]=age.gap*lx[(length(ages)),]%*%solve(p)
           
@@ -253,16 +259,18 @@ mlifeTable <- function(y,X,trans,states,
       #generate life expectancies
       for(i in 1:(length(ages)-1)){
         Tx[i,]=colSums(Lx[i:(length(ages)),])
-        ex[i,]=Tx[i,]/sum(lx[i,1:(ncol(lx)-1)])
+        ex[i,]=Tx[i,]/sum(lx[i,1:(ncol(lx)-1)],na.rm = T)
       }
       Tx[(length(ages)),]=Lx[(length(ages)),]
-      ex[(length(ages)),]=Tx[(length(ages)),]/sum(lx[(length(ages)),1:(ncol(lx)-1)])
+      ex[(length(ages)),]=Tx[(length(ages)),]/sum(lx[(length(ages)),1:(ncol(lx)-1)],na.rm = T)
 
       #save only e0
-      e[reps,]=ex[1,]
+      e[reps,]=round(ex[1,],5)
       #print(c(index.matrix[index,],reps))
       
     }
+    
+    
     tables <- e
     if(!is.na(state.names[1])){
       colnames(tables) <- c(state.names,"death")

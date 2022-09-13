@@ -29,7 +29,7 @@ CreateTrans <- function(ID,Age,State,Death,states){
 CreateTrans.default <- function(ID,Age,State,Death,states){
   
   
-  temp <- data.frame(id=ID,age = Age,state = State,death = Death)
+  temp <- data.frame(id=ID,age = Age,state = as.numeric(factor(State)),death = Death)
   trans <- temp %>%
     dplyr::group_by(id) %>%
     dplyr::mutate(trans = CreatTrans2(age,state,death,states)) %>%
@@ -47,6 +47,7 @@ CreatTrans2 <- function(Age,State,Death,states){
   
   trans <- rep(NA,length(temp$state))
   index <- NULL
+  
   for(i in 1:length(temp$state)){
     
     if(temp$death[i] ==1){
