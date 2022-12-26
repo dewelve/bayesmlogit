@@ -18,7 +18,7 @@ life_compare(
 )
 }
 \arguments{
-\item{file_path}{The file path for reading data. It can be inherited from \code{mlifetable_plot()}.}
+\item{file_path}{The file path for data reading. It can be inherited from \code{mlifetable_plot()}.}
 
 \item{file}{The file path for outputs. Default is \code{paste(file_path,"/mplotResults",sep='')}.}
 
@@ -26,7 +26,7 @@ life_compare(
 
 \item{states}{The total number of states in data. It can be inherited from \code{mlifetable_plot()}.}
 
-\item{ref.var}{A vector that contains all covariates used as reference variables when comparing each subgroup.}
+\item{ref.var}{A vector containing all covariates used as comparison factors for each subgroup.}
 
 \item{ref.level}{A vector that declares the reference value of each reference variable.}
 
@@ -42,15 +42,17 @@ life_compare(
 A \code{.csv} file with comparison results.
 }
 \description{
-A function for comparing life expectancies of each subgroup. By default, this function will calculate the proportion of samples that have a larger life expectancy or life expectancy proportion in your reference group than other groups.
+A function for comparing the life expectancies of subgroups. This function will, by default, calculate the percentage of samples in your reference group with a higher (or lower) life expectancy (or proportion of total life expectancy) than other groups.
 }
 \examples{
 \dontrun{
 
-#By setting the parameter 'compare' in mlifeTable_plot() to TRUE. We can directly use this function.
+#By setting the parameter 'compare' in mlifeTable_plot() to TRUE. 
+#We can directly employ this function.
+
 mlifeTable_plot(X=lifedata[,-1],state.include = 3,
       groupby = c("male","black","hispanic"), 
-      cred = 0.92, 
+      cred = 0.84, 
       states = 3,
       file_path = ".",
       compare = TRUE,

@@ -226,10 +226,8 @@ bayesmlogit.default <- function(y, X,file_path=NA,
       ## beta.j
       PL.j = t(X) %*% (X * w[,j]);
       bL.j = t(X) %*% (kappa[,j] + c.j * w[,j]);
-
       P1.j = PL.j + P.0[,,j];
-      ## Can speed up using Choleksy.
-      V1.j = chol2inv(chol(P1.j));
+      V1.j = chol2inv(chol(P1.j,pivot=TRUE));
       m1.j = V1.j %*% (bL.j + b.0[,j]);
 
       sqrtV1.j = t(chol(V1.j));

@@ -6,7 +6,7 @@
 #' @param states The total number of states in data.
 #' @param file_path The file path for outputs.
 #' @param groupby A vector that contains the covariates for subgroup comparisons. Default is NA, which means we won't make subgroups.
-#' @param vars The covariates considered in subgroup analysis. For covariates that are not specified in vars, we will consider them have the same effect in each subgroup. Please make sure you have specified at least one variable otherwise the life tables would be the same. Default is NA.
+#' @param vars The covariates that considered as mediators in subgroup analysis. Default is NA.
 #' @param status A numeric value. The option allows producing status-based life tables. Default is 0, produces population-based life tables.
 #' @param startages Start age of the life table. Default is 0.
 #' @param endages End age of the life table. Default is 110.
@@ -43,7 +43,7 @@
 #'
 #' # To name each subgroup, try the subgroup.names option.
 #' mlifeTable(y,X,trans =trans,
-#'            groupby = c("male","black","hispanic","other"),
+#'            groupby = c("male","black","hispanic"),
 #'            vars = "mar",
 #'            states=3,
 #'            startages=50,
@@ -53,7 +53,7 @@
 #'            
 #' # To generate plots, try the mlifeTable_plot option
 #' mlifeTable(y,X,trans =trans,
-#'            groupby = c("male","black","hispanic","other"),
+#'            groupby = c("male","black","hispanic"),
 #'            vars = "mar",
 #'            states=3,
 #'            startages=50,
@@ -85,9 +85,13 @@ mlifeTable <- function(y,X,trans,states,
   data <- as.data.frame(X[,-age.index])
   colnames(data) <- colnames(X)[-age.index]
   cols <- colnames(data)
+  # vars <- c(groupby,vars)
   vars.group <- groupby
   vars.other <- setdiff(cols,groupby)
-  trans <- data.frame(trans)
+  if(is.null(dim(trans)[1])){
+    trans <- as.data.frame(matrix(trans,nrow=1,byrow = TRUE))
+  }
+  else{trans <- as.data.frame(trans)}
   
   ##Construct index matrix
   if(!is.na(vars.group[1])){
@@ -138,6 +142,12 @@ mlifeTable <- function(y,X,trans,states,
       
       values <- colMeans(data)
       
+      for(i in 1:length(cols)){
+        if(cols[i] %in% vars.group){
+          values[i] <- as.numeric(index.matrix[index,cols[i]])
+        }
+      }
+      
     }
     
     #Check the existence of this subgroup
@@ -156,7 +166,7 @@ mlifeTable <- function(y,X,trans,states,
         else if(cols[i] %in% vars.group){
           
           values[i] <- as.numeric(index.matrix[index,cols[i]])
-          
+
         }
         else{values[i] <- as.numeric(data.sub[[cols[i]]][1])}
         
@@ -168,18 +178,18 @@ mlifeTable <- function(y,X,trans,states,
     for(reps in 1:nums){
       b <- g[reps,]
       
-      
       for(i in 1:(length(ages))){
         
         covariates <- matrix(c(1,append(values, ages[i], after=(age.index-1)))
                              ,1,length(cols)+2)
+        
         # covariates <- matrix(c(append(values, ages[i], after=(age.index-1)),1)
         #                      ,1,length(cols)+2)
 
         c_length <- ncol(covariates)
         
         xb <- covariates%*%matrix(as.numeric(b),c_length,length(g)/c_length)
-        
+
         tp <- matrix(0,length(xb)+1)
         denom <- 1+sum(exp(xb),na.rm = T)
         
@@ -300,8 +310,13 @@ mlifeTable <- function(y,X,trans,states,
                              1,
                              paste(index.matrix[index,],collapse = '')),
                       collapse = '')))
-    print(paste("subgroup sample size:",
-                data.sub.sample[[1]][t(index.matrix[index,])]))
+    if(!is.null(dim(index.matrix)[1])){
+      print(paste("subgroup sample size:",
+                  data.sub.sample[[1]][t(index.matrix[index,])]))
+    }
+    else{print(paste("subgroup sample size:",
+                     data.sub.sample[[1]][1]))}
+    
   }
   
   if(mlifeTable_plot == TRUE & !is.null(dim(index.matrix)[1])){

@@ -35,7 +35,7 @@ mlifeTable(
 
 \item{groupby}{A vector that contains the covariates for subgroup comparisons. Default is NA, which means we won't make subgroups.}
 
-\item{vars}{The covariates considered in subgroup analysis. For covariates that are not specified in vars, we will consider them have the same effect in each subgroup. Please make sure you have specified at least one variable otherwise the life tables would be the same. Default is NA.}
+\item{vars}{The covariates that considered as mediators in subgroup analysis. Default is NA.}
 
 \item{status}{A numeric value. The option allows producing status-based life tables. Default is 0, produces population-based life tables.}
 
@@ -83,7 +83,7 @@ mlifeTable(y,X,trans =trans,
 
 # To name each subgroup, try the subgroup.names option.
 mlifeTable(y,X,trans =trans,
-           groupby = c("male","black","hispanic","other"),
+           groupby = c("male","black","hispanic"),
            vars = "mar",
            states=3,
            startages=50,
@@ -93,7 +93,7 @@ mlifeTable(y,X,trans =trans,
            
 # To generate plots, try the mlifeTable_plot option
 mlifeTable(y,X,trans =trans,
-           groupby = c("male","black","hispanic","other"),
+           groupby = c("male","black","hispanic"),
            vars = "mar",
            states=3,
            startages=50,

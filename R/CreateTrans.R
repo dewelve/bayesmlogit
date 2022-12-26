@@ -19,7 +19,7 @@
 #' 
 #' Example <- data.frame(ID,Age,State,Death)
 #' 
-#' Example$trans <- CreateTrans(Example$ID,Example$Age,Example$State,Example$Death,states=5)
+#' Example$trans <- CreateTrans(Example$ID,Example$Age, Example$State,Example$Death,states=6)
 #' 
 #' 
 CreateTrans <- function(ID,Age,State,Death,states){

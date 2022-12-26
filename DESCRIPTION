@@ -25,3 +25,7 @@ Imports:
     base,stats,ggplot2,dplyr,magrittr
 Depends: 
     R (>= 4.1.0)
+Suggests: 
+    rmarkdown,
+    knitr
+VignetteBuilder: knitr
