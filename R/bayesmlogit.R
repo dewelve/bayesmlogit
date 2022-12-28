@@ -227,7 +227,7 @@ bayesmlogit.default <- function(y, X,file_path=NA,
       PL.j = t(X) %*% (X * w[,j]);
       bL.j = t(X) %*% (kappa[,j] + c.j * w[,j]);
       P1.j = PL.j + P.0[,,j];
-      V1.j = chol2inv(chol(P1.j,pivot=TRUE));
+      V1.j = chol2inv(chol(P1.j));
       m1.j = V1.j %*% (bL.j + b.0[,j]);
 
       sqrtV1.j = t(chol(V1.j));
