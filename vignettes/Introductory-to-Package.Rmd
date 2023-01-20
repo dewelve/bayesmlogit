@@ -71,9 +71,10 @@ The transitions can be obtained in two steps:
 
 where the first column indicates the start state of subjects and the first row indicates the end state at this time interval. The numbers indicates the index of our transitions. Even though certain transitions in this table, such as "Death" to "Health," are impossible, we must nonetheless label them in this sequence. If transitions are not established in this order, computation errors may exist in the final results.
 
-In the package, we provide a function `CreateTrans()` to help you create these transitions. You need to provide subject ID, age, current state, indicator of death and total number of states. Here is an example of this function's usage.
+In the package, we provide a function `CreateTrans()` to help you create these transitions. You need to provide subject ID, age, current state, indicator of death and total number of states. Here is another example of this function's usage.
 
 ```{r}
+#In this example, we generate 250 observations and 6 states (including death). Based on these observations, we apply the `CreateTrans()` function and generate the transitions.
 
 #Create subject IDs for each observation. In this example, we have 50 subjects and 250 observations in total.
 ID <- rep(1:50, each = 5) 
@@ -147,13 +148,13 @@ When generating life tables, the function will index each subgroup and report sa
 
 where "subgroup000" indicates "male = 0", "black = 0", "hispanic = 0" and "subgroup001" indicates "male = 0", "black = 0", "hispanic = 1". Other subgroups are also named in this order. All indexed life tables will be saved as ".txt" files in the specified path.
 
-Without giving names of each state, the life table will appear as follows:
+This step will output six life table files, corresponding six subgroups. Each life table will contain 200 lines, which are generated from 200 posterior samples. Without giving names of each state, the life table will appear as follows (Only show the first five lines):
 
 ```{r, echo = FALSE}
 
-lifetable <- data.frame(V1 = c(12.26391,12.98282,11.97415,11.36613,10.32153,11.22679	),
-                        V2 = c(12.37167, 13.26774, 13.92443, 13.62579, 13.61575, 13.41254),
-                        V3 = c(35.37205, 33.85567, 34.11296, 35.02107, 36.06585, 35.46204))
+lifetable <- data.frame(V1 = c(12.26391,12.98282,11.97415,11.36613,10.32153),
+                        V2 = c(12.37167, 13.26774, 13.92443, 13.62579, 13.61575),
+                        V3 = c(35.37205, 33.85567, 34.11296, 35.02107, 36.06585))
 
 head(lifetable)
 ```

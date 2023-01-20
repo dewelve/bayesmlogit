@@ -1582,9 +1582,11 @@ established in this order, computation errors may exist in the final
 results.</p>
 <p>In the package, we provide a function <code>CreateTrans()</code> to
 help you create these transitions. You need to provide subject ID, age,
-current state, indicator of death and total number of states. Here is an
-example of this function’s usage.</p>
-<pre class="r"><code>#Create subject IDs for each observation. In this example, we have 50 subjects and 250 observations in total.
+current state, indicator of death and total number of states. Here is
+another example of this function’s usage.</p>
+<pre class="r"><code>#In this example, we generate 250 observations and 6 states (including death). Based on these observations, we apply the `CreateTrans()` function and generate the transitions.
+
+#Create subject IDs for each observation. In this example, we have 50 subjects and 250 observations in total.
 ID &lt;- rep(1:50, each = 5) 
 
 #Create Age variable for each observation.
@@ -1605,16 +1607,16 @@ Example$trans &lt;- CreateTrans(Example$ID,Example$Age,
 #The transition for the first observation of each subject is NA because we cannot observe their previous states. 
 head(Example,10)</code></pre>
 <pre><code>##    ID Age State Death trans
-## 1   1  31     3     0    NA
-## 2   1  32     5     0    17
-## 3   1  33     4     0    28
-## 4   1  34     1     0    19
-## 5   1  35     4     1     6
-## 6   2  31     1     0    NA
-## 7   2  32     4     0     4
-## 8   2  33     3     0    21
-## 9   2  34     3     0    15
-## 10  2  35     3     1    18</code></pre>
+## 1   1  31     5     0    NA
+## 2   1  32     2     0    26
+## 3   1  33     3     0     9
+## 4   1  34     5     0    17
+## 5   1  35     3     1    30
+## 6   2  31     3     0    NA
+## 7   2  32     1     0    13
+## 8   2  33     3     0     3
+## 9   2  34     1     0    13
+## 10  2  35     4     1     6</code></pre>
 </div>
 </div>
 <div id="bayesmlogit-method" class="section level2">
@@ -1686,15 +1688,16 @@ and report sample size of each group:</p>
 and “subgroup001” indicates “male = 0”, “black = 0”, “hispanic = 1”.
 Other subgroups are also named in this order. All indexed life tables
 will be saved as “.txt” files in the specified path.</p>
-<p>Without giving names of each state, the life table will appear as
-follows:</p>
+<p>This step will output six life table files, corresponding six
+subgroups. Each life table will contain 200 lines, which are generated
+from 200 posterior samples. Without giving names of each state, the life
+table will appear as follows (Only show the first five lines):</p>
 <pre><code>##         V1       V2       V3
 ## 1 12.26391 12.37167 35.37205
 ## 2 12.98282 13.26774 33.85567
 ## 3 11.97415 13.92443 34.11296
 ## 4 11.36613 13.62579 35.02107
-## 5 10.32153 13.61575 36.06585
-## 6 11.22679 13.41254 35.46204</code></pre>
+## 5 10.32153 13.61575 36.06585</code></pre>
 <p>where “V1”, “V2” and “V3” correspond to the three states “health”,
 “unhealthiness” and “death”. The numbers below each state indicate the
 expected number of years that the population will remain in that state.
