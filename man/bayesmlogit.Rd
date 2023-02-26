@@ -41,7 +41,7 @@ A list that contains two arrays:
 The number of columns in both arrays is determined by the number of covariates in X and the number of unique transition status in y. For example, if we have 12 covariates in X and 36 unique transitions in y, our result will contain (12+1)*(36-1)= 455 columns in total.
 }
 \description{
-A Bayesian Multistate Life Table Method for survey data, developed by Lynch and Zang (2022), allowing for large state spaces with quasi-absorbing states (i.e., structural zeros in a transition matrix). This function conducts Bayesian multinomial logistic regressions using Polya-Gamma latent variables (Polson 2013),nd should be jointly used with the \code{mlifetable()} function, which will generate life tables based on the estimates from the Bayesian multinomial logit regressions.
+A Bayesian Multistate Life Table Method for survey data, developed by Lynch and Zang (2022), allowing for large state spaces with quasi-absorbing states (i.e., structural zeros in a transition matrix). This function came from the deprecated \code{bayeslogit} package, which conducts Bayesian multinomial logistic regressions using Polya-Gamma latent variables (Polson 2013). It should be jointly used with the \code{mlifetable()} function, which will generate life tables based on the estimates from regressions.
 }
 \examples{
 \dontrun{
