@@ -45,7 +45,9 @@ bayesmlogit.default <- function(y, X,file_path=NA,
                    trace.plot=FALSE)
 
 {
-
+  if (any(is.na(y)) | any(is.na(X)))
+    stop("Missing values need to be elimnated before using this function",
+         call. = FALSE)
   ##Pre-process
   y.1 <- sort(unique(y))
   y <- match(y,y.1)
