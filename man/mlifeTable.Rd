@@ -11,7 +11,8 @@ mlifeTable(
   states,
   file_path,
   groupby = NA,
-  vars = NA,
+  no_control = NA,
+  values = NA,
   status = 0,
   startages = 0,
   endages = 110,
@@ -33,9 +34,11 @@ mlifeTable(
 
 \item{file_path}{The file path for outputs.}
 
-\item{groupby}{A vector that contains the covariates for subgroup comparisons. Default is NA, which means we won't make subgroups.}
+\item{groupby}{A vector that contains the covariates for subgroup comparisons. Default is NA, which means that we won't make subgroups.}
 
-\item{vars}{The covariates that considered as mediators in subgroup analysis. Default is NA.}
+\item{no_control}{The covariates that we don't want to control in subgroup analysis. Default is NA, which means we will control all covariates in X.}
+
+\item{values}{A list that specifies values for covariates. Default is NA.}
 
 \item{status}{A numeric value. The option allows producing status-based life tables. Default is 0, produces population-based life tables.}
 
@@ -75,7 +78,7 @@ out <- bayesmlogit(y, X ,samp=1000, burn=500,verbose=10)
 trans <- out$outwstepwidth
 mlifeTable(y,X,trans =trans,
            groupby = c("male","black","hispanic"),
-           vars = "mar",
+           no_control = "mar",
            startages=50,
            age.gap=1,
            states=3,
@@ -84,7 +87,7 @@ mlifeTable(y,X,trans =trans,
 # To name each subgroup, try the subgroup.names option.
 mlifeTable(y,X,trans =trans,
            groupby = c("male","black","hispanic"),
-           vars = "mar",
+           no_control = "mar",
            states=3,
            startages=50,
            age.gap=1,
@@ -94,7 +97,7 @@ mlifeTable(y,X,trans =trans,
 # To generate plots, try the mlifeTable_plot option
 mlifeTable(y,X,trans =trans,
            groupby = c("male","black","hispanic"),
-           vars = "mar",
+           no_control = "mar",
            states=3,
            startages=50,
            age.gap=1,
@@ -103,6 +106,20 @@ mlifeTable(y,X,trans =trans,
            subgroup.names= c("F-W","M-W","M-B","F-B","F-H","M-H"),
            mlifeTable_plot = T,
            cred = 0.84)
+           
+# To specify a variable at a fixed value other than the mean value. Try option "values".
+mlifeTable(y,X,trans =trans,
+           groupby = c("male","black","hispanic"),
+           no_control = "mar",
+           values = list("cohort" = 36),
+           states=3,
+           startages=50,
+           age.gap=1,
+           nums = 400,
+           file_path=".",
+           subgroup.names= c("F-W","M-W","M-B","F-B","F-H","M-H"),
+           mlifeTable_plot = T,
+           cred = 0.84)       
                            
 }
 }

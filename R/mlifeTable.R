@@ -5,8 +5,9 @@
 #' @param trans The posterior samples generated using \code{?bayesmlogit()}.
 #' @param states The total number of states in data.
 #' @param file_path The file path for outputs.
-#' @param groupby A vector that contains the covariates for subgroup comparisons. Default is NA, which means we won't make subgroups.
-#' @param vars The covariates that considered as mediators in subgroup analysis. Default is NA.
+#' @param groupby A vector that contains the covariates for subgroup comparisons. Default is NA, which means that we won't make subgroups.
+#' @param no_control The covariates that we don't want to control in subgroup analysis. Default is NA, which means we will control all covariates in X.
+#' @param values A list that specifies values for covariates. Default is NA.
 #' @param status A numeric value. The option allows producing status-based life tables. Default is 0, produces population-based life tables.
 #' @param startages Start age of the life table. Default is 0.
 #' @param endages End age of the life table. Default is 110.
@@ -35,7 +36,7 @@
 #' trans <- out$outwstepwidth
 #' mlifeTable(y,X,trans =trans,
 #'            groupby = c("male","black","hispanic"),
-#'            vars = "mar",
+#'            no_control = "mar",
 #'            startages=50,
 #'            age.gap=1,
 #'            states=3,
@@ -44,7 +45,7 @@
 #' # To name each subgroup, try the subgroup.names option.
 #' mlifeTable(y,X,trans =trans,
 #'            groupby = c("male","black","hispanic"),
-#'            vars = "mar",
+#'            no_control = "mar",
 #'            states=3,
 #'            startages=50,
 #'            age.gap=1,
@@ -54,7 +55,7 @@
 #' # To generate plots, try the mlifeTable_plot option
 #' mlifeTable(y,X,trans =trans,
 #'            groupby = c("male","black","hispanic"),
-#'            vars = "mar",
+#'            no_control = "mar",
 #'            states=3,
 #'            startages=50,
 #'            age.gap=1,
@@ -63,13 +64,28 @@
 #'            subgroup.names= c("F-W","M-W","M-B","F-B","F-H","M-H"),
 #'            mlifeTable_plot = T,
 #'            cred = 0.84)
+#'            
+#' # To specify a variable at a fixed value other than the mean value. Try option "values".
+#' mlifeTable(y,X,trans =trans,
+#'            groupby = c("male","black","hispanic"),
+#'            no_control = "mar",
+#'            values = list("cohort" = 36),
+#'            states=3,
+#'            startages=50,
+#'            age.gap=1,
+#'            nums = 400,
+#'            file_path=".",
+#'            subgroup.names= c("F-W","M-W","M-B","F-B","F-H","M-H"),
+#'            mlifeTable_plot = T,
+#'            cred = 0.84)       
 #'                            
 #' }
 
 mlifeTable <- function(y,X,trans,states,
                        file_path,
                        groupby=NA,
-                       vars = NA,
+                       no_control = NA,
+                       values = NA,
                        status = 0,
                        startages=0,
                        endages=110,
@@ -79,32 +95,36 @@ mlifeTable <- function(y,X,trans,states,
                        state.names = NA,
                        ...
 ){
-  
+  if (any(colnames(as.data.frame(X)) == "age")){
+    stop("Please include a variable named as 'age' in X",
+         call. = FALSE)
+  }
+    
   ##Subgroup
   age.index <- which(colnames(as.data.frame(X)) %in% "age" ==TRUE)
+  value.list <- values
   data <- as.data.frame(X[,-age.index])
   colnames(data) <- colnames(X)[-age.index]
   cols <- colnames(data)
-  # vars <- c(groupby,vars)
-  vars.group <- groupby
-  vars.other <- setdiff(cols,groupby)
+  # no_control <- c(groupby,no_control)
+  no_control.group <- groupby
+  no_control.other <- setdiff(cols,groupby)
   if(is.null(dim(trans)[1])){
     trans <- as.data.frame(matrix(trans,nrow=1,byrow = TRUE))
   }
   else{trans <- as.data.frame(trans)}
   
   ##Construct index matrix
-  if(!is.na(vars.group[1])){
-    if(length(vars.group)>1){
-      data.group.list <- lapply(data[,vars.group],c)
-      index.matrix <- sapply(unique(data[,vars.group]),as.character)
+  if(!is.na(no_control.group[1])){
+    if(length(no_control.group)>1){
+      data.group.list <- lapply(data[,no_control.group],c)
+      index.matrix <- sapply(unique(data[,no_control.group]),as.character)
     }
     else{
-      
-      data.group.list <- list(data[,vars.group])
-      names(data.group.list) <- vars.group
-      index.matrix <- as.matrix(sapply(unique(data[,vars.group]),as.character))
-      colnames(index.matrix) <- vars.group
+      data.group.list <- list(data[,no_control.group])
+      names(data.group.list) <- no_control.group
+      index.matrix <- as.matrix(sapply(unique(data[,no_control.group]),as.character))
+      colnames(index.matrix) <- no_control.group
     }
     
   }
@@ -119,8 +139,8 @@ mlifeTable <- function(y,X,trans,states,
   ##Subgroup means
   data.sub <- list()
   data.sub.sample <- list(tapply(data[,1],data.group.list,length))
-  for(i in vars.other){
-    if(i %in% vars){
+  for(i in no_control.other){
+    if(i %in% no_control){
       data.sub <- append(data.sub,list(tapply(data[,i],data.group.list,mean)))
     }
     else{
@@ -128,7 +148,7 @@ mlifeTable <- function(y,X,trans,states,
     }
     
   }
-  names(data.sub) <- vars.other
+  names(data.sub) <- no_control.other
   
   ##Construct life tables
   g <- trans
@@ -138,12 +158,13 @@ mlifeTable <- function(y,X,trans,states,
   #Create the values for matrix covariates.
   for(index in 1:ifelse(is.null(dim(index.matrix)[1]),1,dim(index.matrix)[1])){
     
-    if(is.null(colnames(index.matrix)[1]) | is.na(vars[1])){
+    if(is.null(colnames(index.matrix)[1]) | is.na(no_control[1])){
       
       values <- colMeans(data)
+      names(values) <- colnames(data)
       
       for(i in 1:length(cols)){
-        if(cols[i] %in% vars.group){
+        if(cols[i] %in% no_control.group){
           values[i] <- as.numeric(index.matrix[index,cols[i]])
         }
       }
@@ -151,19 +172,19 @@ mlifeTable <- function(y,X,trans,states,
     }
     
     #Check the existence of this subgroup
-    else if(!is.na(data.sub[[vars[1]]][t(index.matrix[index,vars.group])]) |
-            !is.null(data.sub[[vars[1]]][t(index.matrix[index,vars.group])])){
+    else if(!is.na(data.sub[[no_control[1]]][t(index.matrix[index,no_control.group])]) |
+            !is.null(data.sub[[no_control[1]]][t(index.matrix[index,no_control.group])])){
       
       values <- NULL
       for(i in 1:length(cols)){
         
         #Find the place of this covariate.
-        if(cols[i] %in% vars.other & cols[i] %in% vars){
+        if(cols[i] %in% no_control.other & cols[i] %in% no_control){
           
-          values[i] <- data.sub[[cols[i]]][t(index.matrix[index,vars.group])]
+          values[i] <- data.sub[[cols[i]]][t(index.matrix[index,no_control.group])]
           
         }
-        else if(cols[i] %in% vars.group){
+        else if(cols[i] %in% no_control.group){
           
           values[i] <- as.numeric(index.matrix[index,cols[i]])
 
@@ -174,6 +195,17 @@ mlifeTable <- function(y,X,trans,states,
     }
     else{next}
     
+    if(all(!is.na(names(value.list))) & all(!is.null(names(value.list)))){
+      
+      values[names(value.list)] <- as.numeric(value.list)
+      
+    }
+    else if(!(all(is.na(names(value.list))))){ 
+      stop("Please specify names for each included variable",
+           call. = FALSE)
+    }
+    
+
     #Construct life tables.
     for(reps in 1:nums){
       b <- g[reps,]
