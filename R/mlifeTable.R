@@ -95,7 +95,7 @@ mlifeTable <- function(y,X,trans,states,
                        state.names = NA,
                        ...
 ){
-  if (any(colnames(as.data.frame(X)) == "age")){
+  if (all(colnames(as.data.frame(X)) != "age")){
     stop("Please include a variable named as 'age' in X",
          call. = FALSE)
   }
@@ -161,7 +161,7 @@ mlifeTable <- function(y,X,trans,states,
     if(is.null(colnames(index.matrix)[1]) | is.na(no_control[1])){
       
       values <- colMeans(data)
-      names(values) <- colnames(data)
+      names(values) <- cols
       
       for(i in 1:length(cols)){
         if(cols[i] %in% no_control.group){
@@ -194,8 +194,13 @@ mlifeTable <- function(y,X,trans,states,
       }
     }
     else{next}
+    names(values) <- cols
     
     if(all(!is.na(names(value.list))) & all(!is.null(names(value.list)))){
+      if(!all(names(value.list) %in% cols)){
+        stop("Please make sure names of specified variables are consistent with colnames in your dataset.",
+             call. = FALSE)
+      }
       
       values[names(value.list)] <- as.numeric(value.list)
       
@@ -204,7 +209,6 @@ mlifeTable <- function(y,X,trans,states,
       stop("Please specify names for each included variable",
            call. = FALSE)
     }
-    
 
     #Construct life tables.
     for(reps in 1:nums){
