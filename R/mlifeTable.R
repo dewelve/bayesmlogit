@@ -96,10 +96,12 @@ mlifeTable <- function(y,X,trans,states,
                        ...
 ){
   if (all(colnames(as.data.frame(X)) != "age")){
-    stop("Please include a variable named as 'age' in X",
+    stop("Please include a variable named as 'age' in X.",
          call. = FALSE)
   }
-    
+  if (any(names(values)) %in% no_control)  {
+    warning("Please do not fix a variable which is not controlled.")
+  }
   ##Subgroup
   age.index <- which(colnames(as.data.frame(X)) %in% "age" ==TRUE)
   value.list <- values
