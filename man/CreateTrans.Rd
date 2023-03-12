@@ -21,7 +21,7 @@ CreateTrans(ID, Age, State, Death, states)
 A vector that contains all transitions.
 }
 \description{
-A function used to create transition vectors with data in long format, which requires \code{dplyr} package. The rules for creating transitions can be found with \code{?lifedata}
+A function used to create transition vectors with data in long format, which requires \code{dplyr} package. The rules for creating transitions can be found with \code{?lifedata}.
 }
 \examples{
 ID <- rep(1:50, each = 5) 

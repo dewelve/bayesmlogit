@@ -99,7 +99,7 @@ mlifeTable <- function(y,X,trans,states,
     stop("Please include a variable named as 'age' in X.",
          call. = FALSE)
   }
-  if (any(names(values)) %in% no_control)  {
+  if (any(names(values) %in% no_control)) {
     warning("Please do not fix a variable which is not controlled.")
   }
   ##Subgroup
