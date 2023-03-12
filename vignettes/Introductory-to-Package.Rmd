@@ -115,7 +115,7 @@ out <- bayesmlogit(y, X ,samp=1000, burn=500, step.width = 5, verbose=10)
 
 Above codes generate 1000 posterior samples for `lifedata` after 500 burn-in samples. To reduce autocorrelation among each sample, we will select one sample from every five posterior samples.
 
-The function has two outcomes: **out** and **outwstepwidth**. **out** contains all posterior samples generated after burn-in, while **outwstepwidth** includes only selected posterior samples. In this example, we wil have 1000 posterior samples in **out** and 200 samples in **outwstepwidth**.
+The function has two outcomes: **out** and **outwstepwidth**. **out** contains all posterior samples generated after burn-in, while **outwstepwidth** includes only selected posterior samples. In this example, we will have 1000 posterior samples in **out** and 200 samples in **outwstepwidth**.
 
 ## **2: Multi-state Life Table Method**
 

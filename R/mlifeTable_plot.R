@@ -1,5 +1,5 @@
 #' @title Plot life expectancies
-#' @description  A function for plotting posterior means and their credible intervals. Can also be used as a subfunction in \code{mlifetable()}.
+#' @description  A function for plotting posterior means and their credible intervals. It can also be used as a subfunction in \code{mlifetable()}.
 #' @param state.include A vector or a number used to specify the states whose expectancy years are of interest. Default is 0, which means we'll generate plots for all states. For multiple states specified, we will get the expectancy years for each state and their sum.
 #' @param groupby A vector that contains covariates for subgroup comparisons. It can be inherited from \code{mlifetable()}.
 #' @param file_path The file path for outputs. It can be inherited from \code{mlifetable()}.

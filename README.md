@@ -1,66 +1,459 @@
-# R Package: bayesmlogit
+## Documentation for functions and sample data
 
+### CreateTrans()
 
+#### Description:
 
-## Introduction
+A function used to create transition vectors with data in long format, which requires dplyr package. The rules for creating transitions can be found with ?lifedata.
 
-#### Multistate Life Table Method in Aging Research
+#### Parameters:
 
-Multistate life table (MSLT) methodology, also known as increment-decrement life table methodology, is a tool originally developed in demography for studying the life course implications of transitions into and out of states defined by health or other statuses. Because the output of the MSLTs, such as years of life remaining to be spent with various health conditions, can be easily understood by policymakers, lay people, and non-statistically oriented academics, MSLT methods have been used widely in many different fields, particularly in population research. Originally, MSLT methods relied on census and aggregate vital statistics data.  In recent decades, use of survey data has become more common for multistate life table estimation. Survey data can often provide richer information than census data, allowing researchers to study more complex state spaces and provide more detail regarding differences in state expectancies.
+- **ID**: A vector that specifies the ID for each subject.
+- **Age**: A vector that indicates each subject's age at this visit.
+- **State**: A vector or a factor that indicates the state for each subject at this visit.
+- **Death**: A vector that indicates whether the subject died or not at this visit.
+- **states**: The total number of states in our data.
 
-Despite its popularity in demography, there are relatively limited examples of multistate life table (MSLT) applications in gerontological research. One of the major reasons is that most applications of multistate methods to date have been limited to investigating simple two-living states-plus-death state spaces---such as healthy, unhealthy, and deceased---with health typically defined as not having diagnosed diseases. **Nonetheless, aging processes and outcomes are complex and multidimensional.** Although several multistate methods have been developed over the last two decades to facilitate the use of multistate methods with sample data, **these methods have serious shortcomings that limit their ability to address important and detailed questions concerning complex health processes.** Particularly, most existing methods have difficulties to handle large state spaces, particularly when there are structural zeros in the transition matrices. This limitation inhibits the examination of multiple different transitions into multiple different states. For example, at least half of older adults in the U.S. have three or more chronic conditions in 2017 (1). Modelling the process of multimorbidity development with three or more chronic conditions requires estimating an extremely large state space, which would be a challenge for most existing MSLT methods. In addition, some combinations of chronic conditions are relatively rare, leading to sparse transition matrices, and therefore adding additional technical difficulties.
+#### Output:
 
-#### **The Newly Developed Bayesian Approach**
+A vector that contains all transitions.
 
-Recently, the PI and her collaborator have developed a Bayesian approach to estimating MSLTs (2), **which can be very useful for modelling a complex health process when considering multiple predisposing factors and multiple coexisting health conditions.** This method involves four steps: 1) sampling parameters from a multinomial logit model predicting transitions with selected covariates, using Markov chain Monte Carlo methods (using Polya-Gamma latent variables to facilitate Gibbs sampling), 2) generating sets of age-specific transition probability matrices from the samples by applying the sampled model coefficients to a selected set of covariate values, (3) applying standard multistate life table calculations to the sets of transition probability matrices, and (4) summarizing quantities of interest from the tables. 
+#### Example:
 
-The Bayesian approach offers some key advantages over other approaches. First, prior information from existing literature or professional expertise can be incorporated formally into Bayesian models, while it is difficult to do so under other approaches. This is particularly desirable when certain diseases are rare and/or data are limited, as incorporating prior knowledge can help researchers reduce the noise and bias from small samples. Second, the Bayesian paradigm enables direct, probabilistic interpretations of estimates, while such interpretations of estimates obtained from other approaches are not straightforward nor necessarily theoretically justified. Third, from a computational perspective, the Bayesian approach can more easily handle sparse cells that often arise from complex state spaces with sample data than data bootstrapping and other methods can.
+```R
+ID <- rep(1:50, each = 5) 
+Age <- rep(31:35, times = 50) 
+State <- sample(1:5,size=250,replace=TRUE)  
+Death <- rep(c(0,0,0,0,1),times=50)
 
-## How to Use This package?
+Example <- data.frame(ID,Age,State,Death)
 
-#### Preprocess
+Example$trans <- CreateTrans(Example$ID,Example$Age, Example$State,Example$Death,states=6)
+```
 
-Before using the data, we need first construct the appropriate data set. The data set should include a vector for transition status and the covariates for generating the transition matrix. A transition status vector is a vector that includes the serial number of each transition. We have provided an example in the package, users can use `?lifedata` or `?lifedata_simp` in R to find more details. 
+<div style="page-break-after: always; break-after: page;"></div>
 
-#### Generate Transition Matrix
+### bayesmlogit()
 
-First run the function `bayesmlogit()` to generate the transition probability matrix. Details of this function can be found with `?bayesmlogit()` in R. To guarantee the  convergence, we suggest a burn-in times larger than 500. Also, to get a more accurate estimate, a sampling times larger than 5000 would be better. Running this function usually takes a large amount of time. Users can save time by running multiple sampling processes in parallel and combine the results. 
+#### Description:
 
-#### Generate Life Tables and Plots
+A Bayesian Multistate Life Table Method for survey data, developed by Lynch and Zang (2022), allowing for large state spaces with quasi-absorbing states (i.e., structural zeros in a transition matrix). This function came from the deprecated bayeslogit package, which conducts Bayesian multinomial logistic regressions using Polya-Gamma latent variables (Polson 2013). It should be jointly used with the mlifetable() function, which will generate life tables based on the estimates from regressions.
 
-We have provided a function `mlifeTable()` for users to generate life tables for each subgroup based on the transition matrix generated by `bayesmlogit()`.  To generate the plots and summaries for each subgroup, users can set the optional parameter `mlifeTable_plot = TRUE` in the function. Additionally, to compare the life expectancy years between each subgroup, users can set the optional parameters `mlifeTable_plot = TRUE`,  `compare = TRUE` and specify the reference covariates and reference level with `ref.var` and `ref.level`. For more details, please use `?mlifeTable`, `?mlifeTable_plot` and `?life_compare()` to check the parameters and corresponding descriptions in R.
+#### Parameters:
 
+- **y**: A vector of state transitions, which can be created either manually or with CreateTrans(). See more details using ?lifedata.
+- **X**: A matrix of covariates. Note that X must include age as a covariate.
+- **samp**: Number of posterior samples. For efficiency purposes, if you need a large sample (e.g., ≥5000), we recommend parallel computing in a cluster.
+- **burn**: 'burn-in' period. Default is 500.
+- **verbose**: Progress report. Default is 10, which means this function will report the current progress for every 10 posterior samples.
+- **thining**: The thinning strategy to reduce autocorrelation. For example, if thining = 5, this function will select 1 from every 5 posterior samples and generate a new dataset named outwstepwidth.txt. Default is 5.
+- **trace.plot**: If TRUE, this function will create a new directory under given file_path and output corresponding trace plots using samples after burn-in.
+- **file_path**: The file path for outputs. If a path is specified, the result will also be saved in the given file path. You can find two result files in the specified file: result.txt and resultwstep.txt. The former contains all posterior samples generated after burn-in. The latter is sampled from the former one with a specified sampling interval. 
 
+#### Output:
 
-## Common Errors 
+A list that contains two arrays:
 
-#### Singularity Issue
+- **out**: An array that contains all posterior samples generated.
 
-When the sample size is small and the number of possible states is large, there would be singularity problems when generating life tables. To solve this problem, we suggest users choosing a larger sample or deleting those negligible states.  
+- **outwstepwidth**: An array generated by selecting one sample from every thining samples in out.
 
+The number of columns in both arrays is determined by the number of covariates in X and the number of unique transition status in y. For example, if we have 12 covariates in X and 36 unique transitions in y, our result will contain (12+1)*(36-1)= 455 columns in total.
 
+#### Example:
 
+```R
+## Not run: 
+data <- lifedata
+y <- data[,1]
+X <- data[,-1]
 
+# This example will take about 30 mins.
+out <- bayesmlogit(y, X ,samp=1000, burn=500,verbose=10)
+```
 
+<div style="page-break-after: always; break-after: page;"></div>
 
+### mlifeTable()
 
+#### Description:
 
+A Bayesian Multistate Life Table Method for survey data, developed by Lynch and Zang (2022), allowing for large state spaces with quasi-absorbing states (i.e., structural zeros in a transition matrix). This package generates life tables based on the estimates from the Bayesian multinomial logit regressions, which can be obtained using the bayesmlogit() function. The values in the generated life table represent the expected remaining years to be spent in each state conditional on a give age. Current version was designed to only generate life tables based on data with a death state.
 
+#### Parameters:
 
+- **y**: A vector of transitions.
+- **X**: A matrix of covariates. Note that X must include age as a convariate.
+- **trans**: The posterior samples generated using ?bayesmlogit().
+- **states**: The total number of states in data.
+- **file_path**: The file path for outputs.
+- **group_by**: A vector that contains the covariates for subgroup comparisons. Default is NA, which means that we won't make subgroups.
+- **no_control**: The covariates that we don't want to control in subgroup analysis. Default is NA, which means we will control all covariates in X.
+- **values**: A list that specifies values for covariates. Default is NA.
+- **status**: A numeric value. The option allows producing status-based life tables. Default is 0, produces population-based life tables.
+- **startages**: Start age of the life table. Default is 0.
+- **endages**: End age of the life table. Default is 110.
+- **age.gap**: This option allows users to specify the age interval of the life table. Default is 1. For example, if the survey data were sampled every 2 years, users can specify the age interval to be 2 in the life table.
+- **nums**: Number of life tables generated for each subgroup. Default is the size of posterior samples we used.
+- **mlifeTable_plot**: If TRUE, this option will create a new directory mplotResults under given file_path and output corresponding plots and tables for posterior means and credible intervals. Default is FALSE.
+- **state.names**: A vector used to specify names of each state except death. You can also specify them in the output files.
+- **...**: Extra parameters for mlifeTable_plot(). See more details using ?mlifeTable_plot().
 
+#### Output:
 
+Life tables for each subgroup.
 
+#### Example:
 
+```R
+#The life tables generated in the example have 3 columns, which correspond to 3 states: 
+#1: health; 2: unhealthiness; 3: death;
 
+data <- lifedata
+y <- data[,1]
+X <- data[,-1]
 
+# This example will take about 30 mins.
 
+out <- bayesmlogit(y, X ,samp=1000, burn=500,verbose=10) 
 
+trans <- out$outwstepwidth
+mlifeTable(y,X,trans =trans,
+           groupby = c("male","black","hispanic"),
+           no_control = "mar",
+           startages=50,
+           age.gap=1,
+           states=3,
+           file_path=".")
 
+# To name each subgroup, try the subgroup.names option.
+mlifeTable(y,X,trans =trans,
+           groupby = c("male","black","hispanic"),
+           no_control = "mar",
+           states=3,
+           startages=50,
+           age.gap=1,
+           file_path=".",
+           subgroup.names= c("F-W","M-W","M-B","F-B","F-H","M-H"))
+           
+# To generate plots, try the mlifeTable_plot option
+mlifeTable(y,X,trans =trans,
+           groupby = c("male","black","hispanic"),
+           no_control = "mar",
+           states=3,
+           startages=50,
+           age.gap=1,
+           nums = 400,
+           file_path=".",
+           subgroup.names= c("F-W","M-W","M-B","F-B","F-H","M-H"),
+           mlifeTable_plot = T,
+           cred = 0.84)
+           
+# To specify a variable at a fixed value other than the mean value. Try option "values".
+mlifeTable(y,X,trans =trans,
+           groupby = c("male","black","hispanic"),
+           no_control = "mar",
+           values = list("cohort" = 36),
+           states=3,
+           startages=50,
+           age.gap=1,
+           nums = 400,
+           file_path=".",
+           subgroup.names= c("F-W","M-W","M-B","F-B","F-H","M-H"),
+           mlifeTable_plot = T,
+           cred = 0.84)       
+```
 
+<div style="page-break-after: always; break-after: page;"></div>
 
+### mlifeTable_plot()
 
+#### Description:
 
+A function for plotting posterior means and their credible intervals. It can also be used as a subfunction in mlifetable().
 
+#### Parameters:
 
+- **state.include**: A vector or a number used to specify the states whose expectancy years are of interest. Default is 0, which means we'll generate plots for all states. For multiple states specified, we will get the expectancy years for each state and their sum.
+- **groupby**: A vector that contains covariates for subgroup comparisons. It can be inherited from mlifetable().
+- **file_path**: The file path for outputs. It can be inherited from mlifetable().
+- **X**: A matrix of covariates. Note that X must include age as a convariate. It can be inherited from mlifetable().
+- **cred**: Credible level. For example, if cred = 0.84, we will get the 84% credible interval.
+- **states**: The total number of states in data. It can be inherited from mlifetable().
+- **prop**: If TRUE, this function will output life expectancy proportion plots and tables in addition to original life expectancy plots. Default is TRUE.
+- **subgroup.names**: A vector that contains names of each subgroup. You can also specify them in the output files.
+- **state.names**: A vector used to specify names of each state except death. It can be inherited from mlifetable().
+- **compare**: If TRUE, this function will quote life_compare() and generate a table with all comparsion results based on the reference variables and reference levels specified. Default is FALSE.
+- **midpoint.type**: A character used to specify the midpoint type for credible interval plots. Can be either "mean" or "median". Default is "mean", which means the plots will use mean values as the middle point.
+- **...**: Extra parameters for life_compare(). See details using ?life_compare().
 
+#### Output:
+
+Plots and tables for posterior means and credible intervals of each subgroups.
+
+#### Example:
+
+```R
+#Generate plots and corresponding tables only.
+mlifeTable_plot(X=lifedata[,-1],state.include = 0,
+      groupby = c("male","black","hispanic"), 
+      cred = 0.84, 
+      states = 3,
+      file_path = ".")
+      
+#Additionally generate the comparsion results to the reference level.
+mlifeTable_plot(X=lifedata[,-1],state.include = 0,
+      groupby = c("male","black","hispanic"), 
+      cred = 0.84, 
+      states = 3,
+      file_path = ".",
+      compare = TRUE,
+      ref.var = c("black","hispanic"),
+      ref.level = c(0,0))
+
+```
+
+<div style="page-break-after: always; break-after: page;"></div>
+
+### life_compare()
+
+#### Description:
+
+A function for comparing the life expectancies of subgroups. This function will, by default, calculate the percentage of samples in your reference group with a higher (or lower) life expectancy (or proportion of total life expectancy) than other groups.
+
+#### Parameters:
+
+- **file_path**: The file path for data reading. It can be inherited from mlifetable_plot().
+- **file**: The file path for outputs. Default is paste(file_path,"/mplotResults",sep='').
+- **state.include**: The status we aim to compare. It can be a number or a vector. Default is 0, which means we'll consider all states. It can be inherited from mlifetable_plot().
+- **states**: The total number of states in data. It can be inherited from mlifetable_plot().
+- **ref.var**: A vector containing all covariates used as comparison factors for each subgroup.
+- **ref.level**: A vector that declares the reference value of each reference variable.
+- **index.matrix**: A matrix that generated in mlifeTable_plot(). You don't need to specify it when using mlifeTable_plot().
+- **prop**: If TRUE, this function will output the comparision reulsts of life expectancy proportions in addition to orginal comparison results. Default is TRUE. It can be inherited from mlifetable_plot().
+- **criterion**: The criterion for comparison, which can be either ">" or "<". Default is ">".
+- **state.names**: A vector used to specify names of each state except death. It can be inherited from mlifetable_plot().
+
+#### Output:
+
+A .csv file with comparison results.
+
+#### Example:
+
+```R
+#By setting the parameter 'compare' in mlifeTable_plot() to TRUE. 
+#We can directly employ this function.
+
+mlifeTable_plot(X=lifedata[,-1],state.include = 3,
+      groupby = c("male","black","hispanic"), 
+      cred = 0.84, 
+      states = 3,
+      file_path = ".",
+      compare = TRUE,
+      ref.var = c("black","hispanic"),
+      ref.level = c(0,0))
+```
+
+<div style="page-break-after: always; break-after: page;"></div>
+
+### lifedata
+
+#### Description:
+
+Data extracted and processed from The Health and Retirement Study (HRS).
+
+#### Format:
+
+- trans: Transitions that recorded in the original data. In this data, we have 6 kinds of transtions in total.
+- age: Age for each subject.
+- male: Sex for each subject. male=1, female=0.
+- black, hispanic: Dummy variables for race.
+- mar: Marital status.
+- educc, educg: Dummy variables for education level.
+- cohort: Birth cohort, which is birth year minus 1900.
+- neb, mwb, wb: Dummy variables for birth regions.
+- nen, mwn, wn: Dummy variables for residential regions.
+
+#### Details:
+
+To use this package with your data, please make sure your data have a vector for transitions. The transitions can be manually created following the example below:
+
+In lifedata, Each subject has 3 states in the cohort: 1: health; 2: unhealthiness; 3: death. Thus we will have 6 kind of possible transitions: 1:health to health; 2:health to unhealthiness; 3: health to death; 4: unhealthiness to health; 5: unhealthiness to unhealthiness; 6: unhealthiness to death. To check the transition for each subject, please use lifedata[,1].
+
+When creating transitions by yourself, please follow the orders as below:
+
+|               | Health | Unhealthiness | Death |
+| ------------- | ------ | ------------- | ----- |
+| Health        | 1      | 2             | 3     |
+| Unhealthiness | 4      | 5             | 6     |
+| Death         | 7      | 8             | 9     |
+
+where the first column indicates the previous state of subjects and the first row indicates the current state that subjects are in. The numbers indicates the index of our transitions. For impossible transitions like death to death, you can also label them following the above order, which won't change the results. If transitions are not created in this order, the computation may encounter an error. One can also use CreateTrans() to create the transition vector.
+
+<div style="page-break-after: always; break-after: page;"></div>
+
+## Vignette File
+
+### Introduction
+
+We developed a Bayesian approach to estimate multi-state life tables, which can be useful for modelling a complex health process when numerous predisposing variables and coexisting health conditions are included. For details see [SM Lynch & Emma Zang](https://journals.sagepub.com/doi/abs/10.1177/00811750221112398).
+
+This package involves two steps:
+
+1)  Use `bayesmlogit()` to sample parameters from a multinomial logit model predicting transitions with chosen covariates (using Polya-Gamma latent variables to facilitate Gibbs sampling).
+
+2)  Use `mlifeTable()` to generate multi-state life tables from the posterior samples and summarize quantities of interest from the tables.
+
+In this article, we will take the 'lifedata' sample data set as an illustration and describe how to use our package to perform the Bayesian multi-state life table analysis. `lifedata` is extracted and processed from the data provided by The Health and Retirement Study ([HRS](https://hrs.isr.umich.edu/about)), which include three simple states: "health", "unhealthiness" and "death". For more details use `?lifedata()`.
+
+Note that we only present an example in this post. The results are not representative of the entire population. In addition, our results are produced using the MCMC approach. With the same setup, you may obtain varying outcomes.
+
+#### **Installation**
+
+To install this package. Try
+
+```
+devtools::install_github("Xuezhixing-Zhang/bayesmlogit")
+```
+
+#### **Obtain the Transitions**
+
+Before employing the Markov chain Monte Carlo (MCMC) approach, we must determine the transitions of each subject. In `lifedata`, we have two states "health", "unhealthiness" and an end state "death", which can only happen when the subject is dead. Given a time interval, these states determine six kinds of possible transitions: 1:health to health; 2:health to unhealthiness; 3: health to death; 4: unhealthiness to health; 5: unhealthiness to unhealthiness; 6: unhealthiness to death.
+
+The transitions can be obtained in two steps:
+
+-   Eliminate subjects with only one observation.
+
+-   Recode the transitions according to the table below:
+
+|               | Health | Unhealthiness | Death |
+| ------------- | ------ | ------------- | ----- |
+| Health        | 1      | 2             | 3     |
+| Unhealthiness | 4      | 5             | 6     |
+| Death         | 7      | 8             | 9     |
+
+where the first column indicates the start state of subjects and the first row indicates the end state at this time interval. The numbers indicates the index of our transitions. Even though certain transitions in this table, such as "Death" to "Health," are impossible, we must nonetheless label them in this sequence. If transitions are not established in this order, computation errors may exist in the final results.
+
+In the package, we provide a function `CreateTrans()` to help you create these transitions. You need to provide subject ID, age, current state, indicator of death and total number of states. Here is another example of this function's usage.
+
+```R
+#In this example, we generate 250 observations and 6 states (including death). Based on these observations, we apply the `CreateTrans()` function and generate the transitions.
+
+#Create subject IDs for each observation. In this example, we have 50 subjects and 250 observations in total.
+ID <- rep(1:50, each = 5) 
+
+#Create Age variable for each observation.
+Age <- rep(31:35, times = 50) 
+
+#Create the current state for each observation. Without considering the end state "Death", we assume there are five other possible states. 
+State <- sample(1:5,size=250,replace=TRUE)
+
+#Create the indicator of death. All subjects in this example are presumed to have died at the last observation.
+Death <- rep(c(0,0,0,0,1),times=50)
+
+Example <- data.frame(ID,Age,State,Death)
+
+#Use `CreateTrans()` to create transitions of each observation. Here we have six states in total: death and the other five possible states.
+Example$trans <- CreateTrans(Example$ID,Example$Age,
+                             Example$State,Example$Death,states=6)
+
+#The transition for the first observation of each subject is NA because we cannot observe their previous states. 
+head(Example,10)
+```
+
+<div style="page-break-after: always; break-after: page;"></div>
+
+### Bayesmlogit Method
+
+After getting the transitions for each observation, we sample parameters from a multinomial logit model using the MCMC approach. The package provides the `bayesmlogit()` function for generating posterior samples. For further details use `?bayesmlogit()`.
+
+Here is an example for this function:
+
+```R
+data <- lifedata
+y <- data[,1]
+X <- data[,-1]
+
+# This example will take about 30 mins.
+out <- bayesmlogit(y, X ,samp=1000, burn=500, step.width = 5, verbose=10)
+```
+
+Above codes generate 1000 posterior samples for `lifedata` after 500 burn-in samples. To reduce autocorrelation among each sample, we will select one sample from every five posterior samples.
+
+The function has two outcomes: **out** and **outwstepwidth**. **out** contains all posterior samples generated after burn-in, while **outwstepwidth** includes only selected posterior samples. In this example, we will have 1000 posterior samples in **out** and 200 samples in **outwstepwidth**.
+
+<div style="page-break-after: always; break-after: page;"></div>
+
+### **Multi-state Life Table Method**
+
+With posterior samples, we then compute the transition probability matrices and generate multi-state life tables.
+
+#### **Create Life Tables**
+
+The life tables can be created by utilizing `mlifetable()`. Note that the variable "age" must be included in the data, which is necessary for calculating transition probabilities. 
+
+```R
+trans <- out$outwstepwidth
+mlifeTable(y,X,trans =trans,
+           groupby = c("male","black","hispanic"),
+           vars = "mar",
+           startages=50,
+           age.gap=1,
+           states=3,
+           nums =200,
+           file_path=".")
+```
+
+This function provides several options to generate life tables. `trans` is the posterior samples obtained from `bayesmlogit()`. `groupby` specifies the covariates to create subgroups. `vars` indicates the mediators in our analysis. `startages` is the start age for life tables. `age.gap` specifies the age interval for generating life tables. `states` is the total number of states in our data. `nums` is the posterior samples used to generate life tables. `file_path` gives the path for our outputs. We also provide other options for generating life tables, which can be found using `?mlifeTable()`. Each life table is a $\text{num} \times \text{states}$ matrix. In this example, six $200 \times 3$ life tables will be generated, corresponding to six subgroups.
+
+#### **Results**
+
+When generating life tables, the function will index each subgroup and report sample size of each group:
+
+![image-20230311192235932](C:\Users\27448\AppData\Roaming\Typora\typora-user-images\image-20230311192235932.png)
+
+where "subgroup000" indicates "male = 0", "black = 0", "hispanic = 0" and "subgroup001" indicates "male = 0", "black = 0", "hispanic = 1". Other subgroups are also named in this order. All indexed life tables will be saved as ".txt" files in the specified path.
+
+This step will output six life table files, corresponding six subgroups. Each life table will contain 200 lines, which are generated from 200 posterior samples. Without giving names of each state, the life table will appear as follows (Only show the first five lines):
+
+![image-20230311192358989](C:\Users\27448\AppData\Roaming\Typora\typora-user-images\image-20230311192358989.png)
+
+where "V1", "V2" and "V3" correspond to the three states "health", "unhealthiness" and "death". The numbers below each state indicate the expected number of years that the population will remain in that state. When computing total life expectancy, we ignore the final column, "death," and sum the remaining columns.
+
+#### **Plots**
+
+To summarize results of life tables and create simple plots, we can use the set `mlifeTable_plot = TRUE` in `mlifeTable()` or apply function `mlifeTable_plot()` to life tables. In the specified path, the function will create a file folder named "mplotResults" by default.
+
+```R
+#An example for generating plots with mlifeTable().
+mlifeTable(y,X,trans =trans,
+           groupby = c("male","black","hispanic"),
+           vars = "mar",
+           states=3,
+           startages=50,
+           age.gap=1,
+           nums = 200,
+           file_path=".",
+           mlifeTable_plot = T,
+           cred = 0.84)
+
+#An example for generating plots with mlifeTable_plot():
+mlifeTable_plot(X=lifedata[,-1],state.include = 0,
+      groupby = c("male","black","hispanic"), 
+      cred = 0.84, 
+      states = 3,
+      file_path = ".")
+```
+
+where `cred` is the credible level for summarizing credible intervals. The function will generate tables that summarize credible intervals and means for each subgroup's life expectancy. By default, we will get tables and figures for total life expectancy and state-specific life expectancies. Use `?mlifeTable()` and `?mlifeTable_plot()` for more details.
+
+Without naming each state and subgroup, the total life expectancy tables and plots will appear as follows:
+
+**Total Life Expectancy Table:**
+
+![image-20230311192531439](C:\Users\27448\AppData\Roaming\Typora\typora-user-images\image-20230311192531439.png)
+
+**Total Life Expectancy Plot:**
+
+![image-20230311192538674](C:\Users\27448\AppData\Roaming\Typora\typora-user-images\image-20230311192538674.png)
 

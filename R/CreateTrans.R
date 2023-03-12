@@ -1,5 +1,5 @@
 #' @title Create Transition Vector
-#' @description  A function used to create transition vectors with data in long format, which requires \code{dplyr} package. The rules for creating transitions can be found with \code{?lifedata}
+#' @description  A function used to create transition vectors with data in long format, which requires \code{dplyr} package. The rules for creating transitions can be found with \code{?lifedata}.
 #' @param ID A vector that specifies the ID for each subject.
 #' @param Age A vector that indicates each subject's age at this visit.
 #' @param State A vector or a factor that indicates the state for each subject at this visit.
