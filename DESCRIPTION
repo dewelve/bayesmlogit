@@ -1,6 +1,6 @@
 Package: bayesmlogit
 Type: Package
-Title: A Multistate life table (MSLT) methodology based on Bayesian approach
+Title: A Multistate Life Table (MSLT) Methodology Based on Bayesian approach
 Version: 1.0.0
 Authors@R: 
     c(person(given = "Emma",
@@ -28,4 +28,5 @@ Depends:
 Suggests: 
     rmarkdown,
     knitr
-VignetteBuilder: knitr
+VignetteBuilder: 
+    knitr
