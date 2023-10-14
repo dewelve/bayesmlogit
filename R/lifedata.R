@@ -14,7 +14,7 @@
 #' | :-----------: |:-------------:|:--------------:|:--------------:|
 #' | Health        |       1       |       2        |       3        |
 #' | Unhealthiness |       4       |       5        |       6        |
-#' | Death         |       7       |       8        |       9        |
+#' | Death         |       -       |       -        |       -        |
 #' 
 #' where the first column indicates the previous state of subjects and the first row indicates the current state that subjects are in. The numbers indicates the index of our transitions. 
 #' For impossible transitions like death to death, you can also label them following the above order, which won't change the results. If transitions are not created in this order, the computation may encounter an error. One can also use \code{CreateTrans()} to create the transition vector. 

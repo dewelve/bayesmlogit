@@ -36,9 +36,9 @@ mlifeTable(
 
 \item{groupby}{A vector that contains the covariates for subgroup comparisons. Default is NA, which means that we won't make subgroups.}
 
-\item{no_control}{The covariates that we don't want to control in subgroup analysis. Default is NA, which means we will control all covariates in X.}
+\item{no_control}{The covariates that we don't want to control in subgroup analysis. Default is NA, which means we will control all covariates in X. As an example, in Lynch and Zang's study (2022), they incorporated education into the multinomial logit model. However, in the life table calculation, if one does not want to control for education, one could opt to use its region-specific mean rather than the sample mean using no_control.}
 
-\item{values}{A list that specifies values for covariates. Default is NA.}
+\item{values}{A list that specifies values for covariates. Default is NA. If both no_control and values are specified, the option values takes precedence.}
 
 \item{status}{A numeric value. The option allows producing status-based life tables. Default is 0, produces population-based life tables.}
 
@@ -60,7 +60,10 @@ mlifeTable(
 Life tables for each subgroup.
 }
 \description{
-A Bayesian Multistate Life Table Method for survey data, developed by Lynch and Zang (2022), allowing for large state spaces with quasi-absorbing states (i.e., structural zeros in a transition matrix). This package generates life tables based on the estimates from the Bayesian multinomial logit regressions, which can be obtained using the \code{bayesmlogit()} function. The values in the generated life table represent the expected remaining years to be spent in each state conditional on a give age. Current version was designed to only generate life tables based on data with a death state.
+A Bayesian Multistate Life Table Method for survey data, developed by Lynch and Zang (2022), allowing for large state spaces with quasi-absorbing states (i.e., structural zeros in a transition matrix).
+}
+\details{
+This function generates life tables based on the estimates from the Bayesian multinomial logit regressions, which can be obtained using the \code{bayesmlogit()} function. The values in the generated life table represent the expected remaining years to be spent in each state conditional on a give age. Current version was designed to only generate life tables based on data with a death state.
 }
 \examples{
 \dontrun{

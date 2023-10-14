@@ -37,7 +37,7 @@ When creating transitions by yourself, please follow the orders as below:\tabula
     \tab Health \tab Unhealthiness \tab Death \cr
    Health \tab 1 \tab 2 \tab 3 \cr
    Unhealthiness \tab 4 \tab 5 \tab 6 \cr
-   Death \tab 7 \tab 8 \tab 9 \cr
+   Death \tab - \tab - \tab - \cr
 }
 
 

@@ -37,7 +37,7 @@ We developed a Bayesian approach to estimate multi-state life tables, which can 
 
 This package involves two steps:
 
-1)  Use `bayesmlogit()` to sample parameters from a multinomial logit model predicting transitions with chosen covariates (using Polya-Gamma latent variables to facilitate Gibbs sampling).
+1)  Use `bayesmlogit()` to sample parameters from a multinomial logit model predicting transitions with chosen covariates (using Polya-Gamma latent variables to facilitate Gibbs sampling (Polson et al. 2013)).
 
 2)  Use `mlifeTable()` to generate multi-state life tables from the posterior samples and summarize quantities of interest from the tables.
 
@@ -67,7 +67,7 @@ The transitions can be obtained in two steps:
  | :-----------: |:-------------:|:--------------:|:--------------:|
  | Health        |       1       |       2        |       3        |
  | Unhealthiness |       4       |       5        |       6        |
- | Death         |       7       |       8        |       9        |
+ | Death         |       -       |       -        |       -        |
 
 where the first column indicates the start state of subjects and the first row indicates the end state at this time interval. The numbers indicates the index of our transitions. Even though certain transitions in this table, such as "Death" to "Health," are impossible, we must nonetheless label them in this sequence. If transitions are not established in this order, computation errors may exist in the final results.
 
@@ -100,7 +100,7 @@ head(Example,10)
 
 ## **1: Bayesmlogit Method**
 
-After getting the transitions for each observation, we sample parameters from a multinomial logit model using the MCMC approach. The package provides the `bayesmlogit()` function for generating posterior samples. For further details use `?bayesmlogit()`.
+After getting the transitions for each observation, we sample parameters from a multinomial logit model using the MCMC approach. The package provides the `bayesmlogit()` function for generating posterior samples. For further details use `?bayesmlogit()`(Polson et al. 2013).
 
 Here is an example for this function:
 
@@ -138,7 +138,7 @@ mlifeTable(y,X,trans =trans,
 
 ```
 
-This function provides several options to generate life tables. `trans` is the posterior samples obtained from `bayesmlogit()`. `groupby` specifies the covariates to create subgroups. `vars` indicates the mediators in our analysis. `startages` is the start age for life tables. `age.gap` specifies the age interval for generating life tables. `states` is the total number of states in our data. `nums` is the posterior samples used to generate life tables. `file_path` gives the path for our outputs. We also provide other options for generating life tables, which can be found using `?mlifeTable()`. Each life table is a $\text{num} \times \text{states}$ matrix. In this example, six $200 \times 3$ life tables will be generated, corresponding to six subgroups.
+This function provides several options to generate life tables. `trans` is the posterior samples obtained from `bayesmlogit()`(Polson et al. 2013). `groupby` specifies the covariates to create subgroups. `vars` indicates the mediators in our analysis. `startages` is the start age for life tables. `age.gap` specifies the age interval for generating life tables. `states` is the total number of states in our data. `nums` is the posterior samples used to generate life tables. `file_path` gives the path for our outputs. We also provide other options for generating life tables, which can be found using `?mlifeTable()`. Each life table is a $\text{num} \times \text{states}$ matrix. In this example, six $200 \times 3$ life tables will be generated, corresponding to six subgroups.
 
 ### **2.2: Results**
 
@@ -206,3 +206,9 @@ totallife
 **Total Life Expectancy Plot:**
 
 ![](total_life_expectancy.png){width="1500"}
+
+## **Reference**
+
+1. Lynch, S. M., & Zang, E. (2022). "Bayesian Multistate Life Table Methods for Large and Complex State Spaces: Development and Illustration of a New Method." *Sociological Methodology*, 52(2), 254-286.
+
+2. Polson, N. G., Scott, J. G., & Windle, J. (2013). "Bayesian inference for logistic models using Pólya–Gamma latent variables." *Journal of the American statistical Association*, 108(504), 1339-1349.
